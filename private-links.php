@@ -107,3 +107,15 @@ function pl_check_access_token() {
   }
 }
 add_action('template_redirect', 'pl_check_access_token');
+
+//add admin menu page
+function pl_admin_menu() {
+  add_menu_page('Private Links',
+    'Private Links',
+    'manage_options',
+    'private-links',
+    'pl_admin_page',
+    'dashicons-admin-network'
+  );
+}
+add_action('admin_menu', 'pl_admin_menu');
