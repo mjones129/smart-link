@@ -106,3 +106,4 @@ function pl_check_access_token() {
     }
   }
 }
+add_action('template_redirect', 'pl_check_access_token');
