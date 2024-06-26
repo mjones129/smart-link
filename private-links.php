@@ -68,3 +68,16 @@ function pl_send_private_link_email($user_email, $user_id) {
   wp_mail($user_email, $subject, $message);
 }
 
+//check user token for page access
+function pl_check_access_token() {
+  global $wpdb;
+
+  $protected_page_id = 123; //Replace with real page ID.
+  //if there is no access token, redirect to /access-denied/ page.
+  if (is_page($protected_page_id)) {
+    if(!isset($_GET['access_token'])) {
+      wp_redirect(home_url('/access-denied/'));
+      exit();
+    }
+  }
+}
