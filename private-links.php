@@ -79,5 +79,30 @@ function pl_check_access_token() {
       wp_redirect(home_url('/access-denied/'));
       exit();
     }
+
+    $token = $_GET['access_token'];
+    $current_time = current_time('mysql');
+
+    $token_entry = $wpdb->get_row(
+      $wpdb->prepare(
+        "SELECT * FROM " . $wpdb->prefix . "user_tokens WHERE token = %s AND expiration > %s AND used = 0",
+        $token,
+        $current_time
+      )
+    );
+
+    if(!$token_entry) {
+      wp_redirect(home_url('/access-denied/'));
+      exit();
+    } else {
+      //Mark token as used
+      $wpdb->update(
+        $wpdb->prefix . 'user_tokens',
+        array('used' => 1),
+        array('id' => $token_entry->id),
+        array('%d'),
+        array('%d')
+      );
+    }
   }
 }
