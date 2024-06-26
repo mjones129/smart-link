@@ -1,7 +1,7 @@
 <?php
 /*
- * Plugin Name: Pitch Links
- * Description: Generate one-time-use links for easily sharing pitch pages
+ * Plugin Name: Private Links
+ * Description: Generate one-time-use links that expire after 24 hours. 
  * Version: 0.0.1
  * Author: Matt Jones
  */
