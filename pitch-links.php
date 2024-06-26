@@ -28,5 +28,31 @@ function pl_create_token_table() {
     UNIQUE (token)
 ) $charset_collate;";
 
+  require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+  dbDelta($sql);
+}
 
+// Generate and store token
+function pl_generate_user_token($user_id) {
+  global $wpdb;
+  $token = bin2hex(random_bytes(16));
+  $expiration = date('Y-m-d H:i:s', strtotime('+1 day')); // Token valid for 1 day
+
+  $wpdb->insert(
+    $wpdb->prefix . 'user_tokens',
+    array(
+      'user_id' => $user_id,
+      'token' => $token,
+      'expiration' => $expiration,
+      'used' => 0
+    ),
+    array(
+      '%d',
+      '%s',
+      '%s',
+      '%d'
+    )
+  );
+
+  return $token;
 }
