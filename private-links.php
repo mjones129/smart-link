@@ -58,14 +58,13 @@ function pl_generate_user_token($user_id) {
 }
 
 //Send email with private link
-function pl_send_private_link_email($user_email, $user_id) {
+function pl_send_private_link_email($user_email, $user_id, $email_subject) {
   $token = pl_generate_user_token($user_id);
   $private_link = home_url('/special-page/?access_token=' . $token);
 
-  $subject = 'Your Private Link';
   $message = 'Here is your private link: ' . $private_link;
 
-  wp_mail($user_email, $subject, $message);
+  wp_mail($user_email, $email_subject, $message);
 }
 
 //check user token for page access
@@ -108,7 +107,7 @@ function pl_check_access_token() {
 }
 add_action('template_redirect', 'pl_check_access_token');
 
-//add admin menu page
+//add admin menu item
 function pl_admin_menu() {
   add_menu_page('Private Links',
     'Private Links',
@@ -119,3 +118,42 @@ function pl_admin_menu() {
   );
 }
 add_action('admin_menu', 'pl_admin_menu');
+
+function pl_admin_page() {
+?>
+<div class="wrap">
+<h1>Send Access Email</h1>
+<form method="post" action="">
+<table class="form-table">
+<tr valign="top">
+<th scope="row">User ID</th>
+<td><input type="number" name="user_id" required /></td>
+</tr>
+<tr>
+<th>User Email</th>
+<td><input type="email" name="user_email" required /></td>
+</tr>
+<tr>
+<th scope="row">Email Subject</th>
+<td><input type="text" name="email_subject" required /></td>
+</tr>
+</table>
+<input type="submit" name="submit" class="button-primary" value="Send Email" />
+</form>
+</div>
+<?php
+
+  if (isset($_POST['submit'])) {
+    $user_email = sanitize_email($_POST['user_email']);
+    $user_id = intval($_POST['user_id']);
+    $email_subject = sanitize_text_field($_POST['email_subject']);
+
+    if ($user_email && $user_id) {
+      pl_send_private_link_email($user_email, $user_id, $email_subject);
+      echo '<div class="notice notice-success is-dismissible"><p>Email sent successfully!</p></div>';
+    } else {
+      echo '<div class="notice notice-error is-dismissible"><p>Invalid input. Please try again.</p></div>';
+    }
+  }
+}
+?>
