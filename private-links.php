@@ -56,3 +56,15 @@ function pl_generate_user_token($user_id) {
 
   return $token;
 }
+
+//Send email with private link
+function pl_send_private_link_email($user_email, $user_id) {
+  $token = pl_generate_user_token($user_id);
+  $private_link = home_url('/special-page/?access_token=' . $token);
+
+  $subject = 'Your Private Link';
+  $message = 'Here is your private link: ' . $private_link;
+
+  wp_mail($user_email, $subject, $message);
+}
+
