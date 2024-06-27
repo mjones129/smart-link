@@ -185,7 +185,7 @@ add_action('admin_menu', 'pl_admin_menu');
 function pl_admin_page() {
 ?>
 <div class="wrap">
-<h1>Send Access Email</h1>
+<h1>Send Private Link Email</h1>
 <form method="post" action="">
 <table class="form-table">
 <tr valign="top">
