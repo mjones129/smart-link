@@ -10,6 +10,18 @@ if (!defined('ABSPATH')) {
   exit; //Exit if accessed directly
 }
 
+//begin PHPmailer setup
+
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+
+//SMTP needs accurate times, and the PHP time zone MUST be set
+//This should be done in your php.ini, but this is how to do it if you don't have access to that
+date_default_timezone_set('Etc/UTC');
+
+require './vendor/autoload.php';
+
 // create db table on activiation
 register_activation_hook(__FILE__, 'pl_create_token_table');
 function pl_create_token_table() {
