@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.0.2
+ * Version: 0.0.3
  * Author: Matt Jones
  */
 
@@ -35,6 +35,14 @@ function pl_create_token_table() {
 
   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
   dbDelta($sql);
+}
+
+// drop db table on deletion
+register_uninstall_hook(__FILE__, 'pl_plugin_uninstall');
+
+function pl_plugin_uninstall() {
+    // Path to the uninstall script
+    require_once plugin_dir_path(__FILE__) . 'uninstall.php';
 }
 
 // Generate and store token
@@ -107,7 +115,9 @@ $mail->Subject = 'PHPMailer SMTP test';
 //convert HTML into a basic plain-text alternative body
 // $mail->msgHTML(file_get_contents('contents.html'), __DIR__);
 //Replace the plain text body with one created manually
-$mail->AltBody = 'This is a plain-text message body';
+// $mail->AltBody = 'This is a plain-text message body';
+// Add email body
+$mail->Body = 'This is the body element.';
 //Attach an image file
 // $mail->addAttachment('images/phpmailer_mini.png');
 
