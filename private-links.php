@@ -15,6 +15,8 @@ if (!defined('ABSPATH')) {
   exit; //Exit if accessed directly
 }
 
+include_once plugin_dir_path(__FILE__) . '/includes/smtp-settings.php';
+
 // create db table on activiation
 register_activation_hook(__FILE__, 'pl_create_tables');
 function pl_create_tables() {
@@ -220,12 +222,7 @@ function pl_admin_menu() {
 }
 add_action('admin_menu', 'pl_admin_menu');
 
-function pl_render_smtp_settings_page() {
-?>
-<div class="wrap">
-<h1>Hello world from the SMTP Settings Page!</h1>
-</div>
-<?php }
+
 
 function pl_admin_page() {
 ?>
