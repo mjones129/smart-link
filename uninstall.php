@@ -6,11 +6,14 @@ if(!defined('WP_UNINSTALL_PLUGIN')) {
 
 global $wpdb;
 
-//grab table to be dropped
-$table_name = $wpdb->prefix . 'pl_tokens';
+//grab tables to be dropped
+$tokens = $wpdb->prefix . 'pl_tokens';
+$creds = $wpdb->prefix . 'pl_smtp_creds';
 
 //query to drop table
-$sql = "DROP TABLE IF EXISTS $table_name";
+$sql1 = "DROP TABLE IF EXISTS $tokens";
+$sql2 = "DROP TABLE IF EXISTS $creds";
 
 //execute
-$wpdb->query($sql);
+$wpdb->query($sql1);
+$wpdb->query($sql2);
