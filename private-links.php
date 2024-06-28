@@ -207,8 +207,24 @@ function pl_admin_menu() {
     'pl_admin_page',
     'dashicons-admin-network'
   );
+  add_submenu_page(
+    'private-links',
+    'SMTP Settings',
+    'SMTP Settings',
+    'manage_options',
+    'smtp-settings',
+    'pl_render_smtp_settings_page',
+    1
+  );
 }
 add_action('admin_menu', 'pl_admin_menu');
+
+function pl_render_smtp_settings_page() {
+?>
+<div class="wrap">
+<h1>Hello world from the SMTP Settings Page!</h1>
+</div>
+<?php }
 
 function pl_admin_page() {
 ?>
