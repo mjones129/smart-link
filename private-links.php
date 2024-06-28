@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.0.3
+ * Version: 0.1.0
  * Author: Matt Jones
  */
 
@@ -16,25 +16,42 @@ if (!defined('ABSPATH')) {
 }
 
 // create db table on activiation
-register_activation_hook(__FILE__, 'pl_create_token_table');
-function pl_create_token_table() {
+register_activation_hook(__FILE__, 'pl_create_tables');
+function pl_create_tables() {
   global $wpdb;
-  $table_name = $wpdb->prefix . 'user_tokens';
+
+  //define table names
+  $pl_tokens = $wpdb->prefix . 'pl_tokens';
+  $pl_smtp_creds = $wpdb->prefix . 'pl_smtp_creds';
 
   $charset_collate = $wpdb->get_charset_collate();
 
-  $sql = "CREATE TABLE $table_name (
+  //create the tokens table
+  $sql = "CREATE TABLE $pl_tokens (
     id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     token VARCHAR(32) NOT NULL,
     expiration DATETIME NOT NULL,
-    used TINYINT(1) DEFAULT 0,
+    used TINYINT DEFAULT 0,
     PRIMARY KEY (id),
     UNIQUE (token)
 ) $charset_collate;";
 
+  //create the smtp credentials table
+  $sql2 = "CREATE TABLE $pl_smtp_creds (
+  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  host VARCHAR(100) NOT NULL,
+  port SMALLINT NOT NULL,
+  username VARCHAR(100) NOT NULL,
+  password VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id) 
+) $charset_collate;";
+
   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+  //execute both sql queries
   dbDelta($sql);
+  dbDelta($sql2);
 }
 
 // drop db table on deletion
