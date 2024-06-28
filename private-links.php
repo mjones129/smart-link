@@ -200,21 +200,22 @@ add_action('template_redirect', 'pl_check_access_token');
 
 //add admin menu item
 function pl_admin_menu() {
-  add_menu_page('Private Links',
-    'Private Links',
-    'manage_options',
-    'private-links',
-    'pl_admin_page',
-    'dashicons-admin-network'
+  add_menu_page(
+    'Private Links', //page title
+    'Private Links', //menu title
+    'manage_options', //capability
+    'private-links', //menu slug
+    'pl_admin_page', //function to render the page
+    'dashicons-admin-network' //icon (optional)
   );
   add_submenu_page(
-    'private-links',
-    'SMTP Settings',
-    'SMTP Settings',
-    'manage_options',
-    'smtp-settings',
-    'pl_render_smtp_settings_page',
-    1
+    'private-links', //parent slug
+    'SMTP Settings', //page title
+    'SMTP Settings', //menu title
+    'manage_options', // capability
+    'smtp-settings', //menu slug
+    'pl_render_smtp_settings_page', //function to render the page
+    1 //menu position
   );
 }
 add_action('admin_menu', 'pl_admin_menu');
