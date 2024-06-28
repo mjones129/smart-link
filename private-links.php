@@ -51,6 +51,7 @@ function pl_generate_user_token($user_id) {
       'expiration' => $expiration,
       'used' => 0
     ),
+    //specify data types
     array(
       '%d',
       '%s',
