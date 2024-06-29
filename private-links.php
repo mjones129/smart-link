@@ -226,9 +226,16 @@ function pl_admin_menu() {
 }
 add_action('admin_menu', 'pl_admin_menu');
 
-function test ($hashed_pw, $smtp_password) {
+function encryption_test ($hashed_pw, $smtp_password) {
   echo 'Hashed password: ' . $hashed_pw;  
   echo '</br>';
   echo 'Original password: ' . $smtp_password;
+  echo '</br>';
+  $verify = password_verify($smtp_password, $hashed_pw);
+  if($verify) {
+    echo 'Password VERIFIED!';
+  } else {
+    echo 'Unable to verify password.';
+  }
 }
 ?>

@@ -33,6 +33,6 @@ function pl_render_smtp_settings_page() {
 
   //encrypt password
   $hashed_pw = password_hash($smtp_password, PASSWORD_DEFAULT);
-  test($hashed_pw, $smtp_password);
+  encryption_test($hashed_pw, $smtp_password);
 
 }
