@@ -226,4 +226,9 @@ function pl_admin_menu() {
 }
 add_action('admin_menu', 'pl_admin_menu');
 
+function test ($hashed_pw, $smtp_password) {
+  echo 'Hashed password: ' . $hashed_pw;  
+  echo '</br>';
+  echo 'Original password: ' . $smtp_password;
+}
 ?>
