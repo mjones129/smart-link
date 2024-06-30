@@ -1,5 +1,4 @@
 <?php
-function pl_create_tables() {
   global $wpdb;
 
   //define table names
@@ -29,9 +28,13 @@ function pl_create_tables() {
   PRIMARY KEY (id) 
 ) $charset_collate;";
 
+  $sql3 = "INSERT INTO $pl_smtp_creds (host, port, username, password)
+VALUES('hostname-here', 9000, 'fake-user', 'fake-pass');";
+
   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
   //execute both sql queries
   dbDelta($sql);
   dbDelta($sql2);
-}
+  dbDelta($sql3);
+
