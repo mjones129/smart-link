@@ -1,4 +1,17 @@
 <?php
+function encryption_test ($hashed_pw, $smtp_password) {
+  echo 'Hashed password: ' . $hashed_pw;  
+  echo '</br>';
+  echo 'Original password: ' . $smtp_password;
+  echo '</br>';
+  $verify = password_verify($smtp_password, $hashed_pw);
+  if($verify) {
+    echo 'Password VERIFIED!';
+  } else {
+    echo 'Unable to verify password.';
+  }
+}
+
 function pl_render_smtp_settings_page() {
 ?>
 <div class="wrap">
