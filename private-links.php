@@ -66,7 +66,10 @@ function pl_generate_user_token() {
 //Send email with private link
 function pl_send_private_link_email($email_to, $email_subject, $page_slug) {
 
-global $wpdb;
+  global $wpdb;
+  $table = $wpdb->prefix . 'pl_smtp_creds';
+  $query = $wpdb->prepare("SELECT * FROM $table;");
+  $creds = $wpdb->get_results($query, ARRAY_A);
 
 //begin PHPmailer setup
 
@@ -86,15 +89,15 @@ $mail->isSMTP();
 //SMTP::DEBUG_SERVER = client and server messages
 $mail->SMTPDebug = SMTP::DEBUG_SERVER;
 //Set the hostname of the mail server
-$mail->Host = 'mail.example.com';
+$mail->Host = $creds[0]['host'];
 //Set the SMTP port number - likely to be 25, 465 or 587
-$mail->Port = 25;
+$mail->Port = $creds[0]['port'];
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
 //Username to use for SMTP authentication
-$mail->Username = 'yourname@example.com';
+$mail->Username = $creds[0]['username'];
 //Password to use for SMTP authentication
-$mail->Password = 'yourpassword';
+$mail->Password = $creds[0]['password'];
 //Set who the message is to be sent from
 $mail->setFrom('from@example.com', 'First Last');
 //Set an alternative reply-to address
@@ -130,7 +133,7 @@ if (!$mail->send()) {
 
   $message = 'Here is your private link: ' . $private_link;
 
-  wp_mail($email_to, $email_subject, $message); //replace this with PHPMailer
+  // wp_mail($email_to, $email_subject, $message); //replace this with PHPMailer
 }
 
 //check user token for page access
