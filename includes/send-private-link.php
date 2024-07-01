@@ -4,6 +4,7 @@ function pl_admin_page() {
 <div class="wrap">
 <h1>Send Private Link Email</h1>
 <form method="post" action="">
+<?php wp_nonce_field('send_private_link_email_nonce', 'send_private_link_email_nonce_field'); ?>
 <table class="form-table">
 <tr valign="top">
 <th scope="row">User ID</th>
@@ -27,7 +28,7 @@ function pl_admin_page() {
 </div>
 <?php
 
-  if (isset($_POST['submit'])) {
+  if (isset($_POST['submit']) && check_admin_referer('send_private_link_email_nonce', 'send_private_link_email_nonce_field')) {
     $user_email = sanitize_email($_POST['user_email']);
     $user_id = intval($_POST['user_id']);
     $email_subject = sanitize_text_field($_POST['email_subject']);
