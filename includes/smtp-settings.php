@@ -10,7 +10,7 @@ function encryption_test ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $
     'username' => $smtp_email,
     'password' => $hashed_pw
   );
-
+  //specify data types
   $data_types = array(
     '%s', //string
     '%d', //integer
@@ -18,27 +18,19 @@ function encryption_test ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $
     '%s' //string
   );
 
-  //check if row 1 exists in the smtp_creds table
-
-  //create row 1 for the first time
-  $wpdb->insert(
-    $wpdb->prefix . 'pl_smtp_creds',
-    $creds_info, //specify data to insert
-    $data_types, //specify data types
-  );
 
   //update row 1
-  // $wpdb->update(
-    // $wpdb->prefix . 'pl_smtp_creds',
-    //specify data to insert
-    // $creds_info,
+  $wpdb->update(
+    $wpdb->prefix . 'pl_smtp_creds',
+    // specify data to insert
+    $creds_info,
     //define exactly which row to update
-    // array(
-      // 'id' => 1
-    // ),
+    array(
+      'id' => 1
+    ),
     //specify data types
-    // $data_types
-    // );
+    $data_types
+    );
 
   echo 'Hashed password: ' . $hashed_pw;  
   echo '</br>';
@@ -87,6 +79,11 @@ function pl_render_smtp_settings_page() {
     $smtp_port = sanitize_text_field($_POST['smtp_port']);
     $smtp_email = sanitize_text_field($_POST['smtp_email']);
     $smtp_password = sanitize_text_field($_POST['smtp_password']);
+  } else {
+    $smtp_host = '';
+    $smtp_port = '';
+    $smtp_email = '';
+    $smtp_password = '';
   }
 
   //encrypt password
