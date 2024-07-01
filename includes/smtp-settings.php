@@ -77,7 +77,7 @@ function pl_render_smtp_settings_page() {
 
   if(isset($_POST['submit']) && check_admin_referer('smtp_settings_nonce', 'smtp_settings_nonce_field')) {
     $smtp_host = sanitize_text_field($_POST['smtp_host']);
-    $smtp_port = sanitize_text_field($_POST['smtp_port']);
+    $smtp_port = intval($_POST['smtp_port']);
     $smtp_email = sanitize_text_field($_POST['smtp_email']);
     $smtp_password = sanitize_text_field($_POST['smtp_password']);
   } else {
