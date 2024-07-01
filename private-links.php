@@ -66,6 +66,7 @@ function pl_generate_user_token() {
 //Send email with private link
 function pl_send_private_link_email($email_to, $email_subject, $page_slug) {
 
+global $wpdb;
 
 //begin PHPmailer setup
 
