@@ -64,7 +64,7 @@ function pl_generate_user_token() {
 
 
 //Send email with private link
-function pl_send_private_link_email($user_email, $email_subject, $page_slug) {
+function pl_send_private_link_email($email_to, $email_subject, $page_slug) {
 
 
 //begin PHPmailer setup
@@ -129,7 +129,7 @@ if (!$mail->send()) {
 
   $message = 'Here is your private link: ' . $private_link;
 
-  wp_mail($user_email, $email_subject, $message); //replace this with PHPMailer
+  wp_mail($email_to, $email_subject, $message); //replace this with PHPMailer
 }
 
 //check user token for page access

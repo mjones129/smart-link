@@ -7,8 +7,8 @@ function pl_admin_page() {
 <?php wp_nonce_field('send_private_link_email_nonce', 'send_private_link_email_nonce_field'); ?>
 <table class="form-table">
 <tr valign="top">
-<th>User Email</th>
-<td><input type="email" name="user_email" required /></td>
+<th>Send Email To:</th>
+<td><input type="email" name="email_to" required /></td>
 </tr>
 <tr>
 <th scope="row">Email Subject</th>
@@ -25,12 +25,12 @@ function pl_admin_page() {
 <?php
 
   if (isset($_POST['submit']) && check_admin_referer('send_private_link_email_nonce', 'send_private_link_email_nonce_field')) {
-    $user_email = sanitize_email($_POST['user_email']);
+    $email_to = sanitize_email($_POST['email_to']);
     $email_subject = sanitize_text_field($_POST['email_subject']);
     $page_slug = sanitize_text_field($_POST['page_slug']);
 
-    if ($user_email && $page_slug) {
-      pl_send_private_link_email($user_email, $email_subject, $page_slug);
+    if ($email_to && $page_slug) {
+      pl_send_private_link_email($email_to, $email_subject, $page_slug);
       echo '<div class="notice notice-success is-dismissible"><p>Email sent successfully!</p></div>';
     } else {
       echo '<div class="notice notice-error is-dismissible"><p>Invalid input. Please try again.</p></div>';
