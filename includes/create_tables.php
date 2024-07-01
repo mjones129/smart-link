@@ -20,7 +20,7 @@
 
   //create the smtp credentials table
   $sql2 = "CREATE TABLE $pl_smtp_creds (
-  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  id MEDIUMINT NOT NULL,
   host VARCHAR(100) NOT NULL,
   port SMALLINT NOT NULL,
   username VARCHAR(100) NOT NULL,
