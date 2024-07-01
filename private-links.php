@@ -38,7 +38,7 @@ function pl_plugin_uninstall() {
 }
 
 // Generate and store token
-function pl_generate_user_token($user_id) {
+function pl_generate_user_token() {
   global $wpdb;
   $token = bin2hex(random_bytes(16));
   $expiration = date('Y-m-d H:i:s', strtotime('+1 day')); // Token valid for 1 day
@@ -46,7 +46,6 @@ function pl_generate_user_token($user_id) {
   $wpdb->insert(
     $wpdb->prefix . 'user_tokens',
     array(
-      'user_id' => $user_id,
       'token' => $token,
       'expiration' => $expiration,
       'used' => 0
@@ -65,7 +64,7 @@ function pl_generate_user_token($user_id) {
 
 
 //Send email with private link
-function pl_send_private_link_email($user_email, $user_id, $email_subject, $page_slug) {
+function pl_send_private_link_email($user_email, $email_subject, $page_slug) {
 
 
 //begin PHPmailer setup
@@ -125,7 +124,7 @@ if (!$mail->send()) {
     echo 'Message sent!';
 }
 
-  $token = pl_generate_user_token($user_id);
+  $token = pl_generate_user_token();
   $private_link = home_url($page_slug . '?access_token=' . $token);
 
   $message = 'Here is your private link: ' . $private_link;

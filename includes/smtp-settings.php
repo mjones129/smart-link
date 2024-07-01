@@ -26,7 +26,7 @@ function encryption_test ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $
     $creds_info,
     //define exactly which row to update
     array(
-      'id' => 0
+      'id' => 1
     ),
     //specify data types
     $data_types
