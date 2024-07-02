@@ -1,6 +1,5 @@
-
 <?php
-
+function pl_install() {
     global $wpdb;
 
     // Define table names
@@ -68,5 +67,7 @@
         // Handle the error if the file is not writable
         wp_die('The wp-config.php file is not writable.');
     }
+}
 
-
+pl_install();
+?>
