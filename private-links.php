@@ -22,7 +22,7 @@ include_once plugin_dir_path(__FILE__) . '/includes/smtp-settings.php';
 include_once plugin_dir_path(__FILE__) . '/includes/send-private-link.php';
 
 //plugin setup
-register_activation_hook(__FILE__ . 'pl_plugin_activate');
+register_activation_hook(__FILE__,  'pl_plugin_activate');
 
 function pl_plugin_activate() {
   require_once plugin_dir_path(__FILE__) . 'activate.php';
