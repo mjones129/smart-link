@@ -26,9 +26,9 @@ include_once plugin_dir_path(__FILE__) . 'activate.php';
 
 
 // plugin initial setup 
-register_activation_hook(__FILE__, 'pl_activate');
+register_activation_hook(__FILE__, 'pl_activate_include');
 
-function pl_activate() {
+function pl_activate_include() {
   require_once plugin_dir_path(__FILE__) . 'activate.php';
 }
 
