@@ -26,11 +26,7 @@ include_once plugin_dir_path(__FILE__) . 'activate.php';
 
 
 // plugin initial setup 
-register_activation_hook(__FILE__, 'pl_activate_include');
-
-function pl_activate_include() {
   require_once plugin_dir_path(__FILE__) . 'activate.php';
-}
 
 // drop db table on deletion
 register_uninstall_hook(__FILE__, 'pl_plugin_uninstall');

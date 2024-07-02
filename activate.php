@@ -71,4 +71,4 @@ function pl_activate() {
     }
 }
 
-
+register_activation_hook(__FILE__, pl_activate);
