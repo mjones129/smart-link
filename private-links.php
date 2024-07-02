@@ -21,6 +21,9 @@ include_once plugin_dir_path(__FILE__) . '/includes/smtp-settings.php';
 //include the send private link page
 include_once plugin_dir_path(__FILE__) . '/includes/send-private-link.php';
 
+//include setup file
+include_once plugin_dir_path(__FILE__) . 'activate.php';
+
 
 // plugin initial setup 
 register_activation_hook(__FILE__, 'pl_activate');
