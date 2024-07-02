@@ -1,5 +1,14 @@
 <?php
-function encryption_test ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port) {
+
+function pl_encrypt_password($smtp_password) {
+    $encryption_key = PL_ENCRYPTION_KEY;
+    $iv_length = openssl_cipher_iv_length('aes-256-cbc');
+    $iv = openssl_random_pseudo_bytes($iv_length);
+    $encrypted_password = openssl_encrypt($smtp_password, 'aes-256-cbc', $encryption_key, 0, $iv);
+    return base64_encode($iv . $encrypted_password);
+}
+
+function pl_insert_smtp_data ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port) {
   //global wordpress db object
   global $wpdb;
   
@@ -32,16 +41,6 @@ function encryption_test ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $
     $data_types
     );
 
-  echo 'Hashed password: ' . $hashed_pw;  
-  echo '</br>';
-  echo 'Original password: ' . $smtp_password;
-  echo '</br>';
-  $verify = password_verify($smtp_password, $hashed_pw);
-  if($verify) {
-    echo 'Password VERIFIED!';
-  } else {
-    echo 'Unable to verify password.';
-  }
 }
 
 function pl_render_smtp_settings_page() {
@@ -88,7 +87,7 @@ function pl_render_smtp_settings_page() {
   }
 
   //encrypt password
-  $hashed_pw = password_hash($smtp_password, PASSWORD_DEFAULT);
-  encryption_test($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port);
+  $hashed_pw = pl_encrypt_password($smtp_password);
+  pl_insert_smtp_data($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port);
 
 }
