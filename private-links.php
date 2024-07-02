@@ -25,7 +25,7 @@ include_once plugin_dir_path(__FILE__) . '/includes/send-private-link.php';
 register_activation_hook(__FILE__,  'pl_plugin_activate');
 
 function pl_plugin_activate() {
-  require_once plugin_dir_path(__FILE__) . 'activate.php';
+  require_once plugin_dir_path(__FILE__) . 'activate-debug.php';
 }
 
 // drop db table on deletion
