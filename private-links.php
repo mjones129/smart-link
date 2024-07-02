@@ -22,7 +22,7 @@ include_once plugin_dir_path(__FILE__) . '/includes/smtp-settings.php';
 include_once plugin_dir_path(__FILE__) . '/includes/send-private-link.php';
 
 
-// create db table on activiation
+// plugin initial setup 
 register_activation_hook(__FILE__, 'pl_activate');
 
 function pl_activate() {
