@@ -1,7 +1,6 @@
 
 <?php
 
-function pl_activate() {
     global $wpdb;
 
     // Define table names
@@ -69,6 +68,5 @@ function pl_activate() {
         // Handle the error if the file is not writable
         wp_die('The wp-config.php file is not writable.');
     }
-}
 
-register_activation_hook(__FILE__, 'pl_activate');
+
