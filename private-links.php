@@ -23,10 +23,10 @@ include_once plugin_dir_path(__FILE__) . '/includes/send-private-link.php';
 
 
 // create db table on activiation
-register_activation_hook(__FILE__, 'pl_create_tables');
+register_activation_hook(__FILE__, 'pl_activate');
 
-function pl_create_tables() {
-  require_once plugin_dir_path(__FILE__) . './includes/create_tables.php';
+function pl_activate() {
+  require_once plugin_dir_path(__FILE__) . 'activate.php';
 }
 
 // drop db table on deletion
