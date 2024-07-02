@@ -50,16 +50,26 @@ function pl_activate_plugin() {
     if (is_writable($config_path)) {
         error_log('wp-config.php is writable.');
 
-        // Check if the key already exists
         $config_file = file_get_contents($config_path);
+        error_log('Original wp-config.php content: ' . substr($config_file, 0, 500)); // Log the first 500 characters of the file for debugging
+
+        // Check if the key already exists
         if (strpos($config_file, 'define(\'PL_ENCRYPTION_KEY\'') === false) {
             error_log('PL_ENCRYPTION_KEY not found in wp-config.php.');
 
-            $key_define = "\ndefine('PL_ENCRYPTION_KEY', '$key');\n";
+            $key_define = "define('PL_ENCRYPTION_KEY', '$key');\n";
             error_log('Key definition to be added: ' . $key_define);
 
-            // Directly append the key definition to the end of the file
-            if (file_put_contents($config_path, $key_define, FILE_APPEND) !== false) {
+            // Insert the key after the opening PHP tag
+            $new_config_file = preg_replace(
+                '/(<\?php\s+)/',
+                '$1' . $key_define,
+                $config_file
+            );
+            error_log('Updated wp-config.php content: ' . substr($new_config_file, 0, 500)); // Log the first 500 characters of the new content for debugging
+
+            // Attempt to write the updated config file
+            if (file_put_contents($config_path, $new_config_file) !== false) {
                 error_log('Successfully wrote to wp-config.php.');
             } else {
                 error_log('Failed to write to wp-config.php.');
