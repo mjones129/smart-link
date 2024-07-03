@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.3
+ * Version: 0.1.4
  * Author: Matt Jones
  */
 
@@ -110,6 +110,8 @@ $mail->Port = $creds[0]['port'];
 $mail->SMTPAuth = true;
 //define encryption
 $mail->SMTPSecure = 'ENCRYPTION_STARTTLS';
+//enable HTML
+$mail->isHTML(true);
 //Username to use for SMTP authentication
 $mail->Username = $creds[0]['username'];
 //Password to use for SMTP authentication
