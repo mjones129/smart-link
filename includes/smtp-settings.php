@@ -94,8 +94,13 @@ function pl_render_smtp_settings_page() {
     $smtp_name = '';
   }
 
-  //encrypt password
-  $hashed_pw = pl_encrypt_password($smtp_password);
-  pl_insert_smtp_data($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port, $smtp_name);
+  if(isset($smtp_host) && isset($smtp_email) && isset($smtp_password)) {
+    //encrypt password
+    $hashed_pw = pl_encrypt_password($smtp_password);
+    pl_insert_smtp_data($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port, $smtp_name);
+    echo '<div class="notice notice-success is-dismissable"><p>SMTP data successfully updated.</p></div>';
+  } else {
+    echo '<div class="notice notice-error is-dismissable"><p>Failed to save SMTP data.</p></div>';
+  }
 
 }
