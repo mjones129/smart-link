@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.4
+ * Version: 0.1.5
  * Author: Matt Jones
  */
 
@@ -130,7 +130,7 @@ $mail->Subject = $email_subject;
 //Replace the plain text body with one created manually
 // $mail->AltBody = 'This is a plain-text message body';
 // Add email body
-$mail->Body = '<p>'.$email_body.'</p>'.'<p>Here is your link: '.$private_link.'</p>';
+$mail->Body = require_once((__FILE__) . './includes/email-template.php');
 //Attach an image file
 // $mail->addAttachment('images/phpmailer_mini.png');
 
