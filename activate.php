@@ -25,13 +25,14 @@ function pl_activate_plugin() {
         host VARCHAR(100) NOT NULL,
         port SMALLINT NOT NULL,
         username VARCHAR(100) NOT NULL,
+        name VARCHAR(100) NOT NULL,
         password VARCHAR(100) NOT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
 
     // SQL to insert default values into the SMTP credentials table
-    $sql3 = "INSERT INTO $pl_smtp_creds (host, port, username, password)
-             VALUES ('hostname-here', 9000, 'fake-user', 'fake-pass');";
+    $sql3 = "INSERT INTO $pl_smtp_creds (host, port, username, name, password)
+             VALUES ('hostname-here', 9000, 'fake-user', 'John Doe', 'fake-pass');";
 
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 

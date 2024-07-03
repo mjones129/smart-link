@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: Matt Jones
  */
 
@@ -73,12 +73,17 @@ function pl_decrypt_password($encrypted_password) {
 }
 
 //Send email with private link
-function pl_send_private_link_email($email_to, $email_subject, $page_slug) {
+function pl_send_private_link_email($email_to, $email_subject, $page_slug, $email_to_name) {
 
   global $wpdb;
   $table = $wpdb->prefix . 'pl_smtp_creds';
   $query = $wpdb->prepare("SELECT * FROM $table;");
   $creds = $wpdb->get_results($query, ARRAY_A);
+
+  $token = pl_generate_user_token();
+  $private_link = home_url($page_slug . '?access_token=' . $token);
+  $message = 'Here is your private link: ' . $private_link;
+
 
 //begin PHPmailer setup
 
@@ -108,20 +113,20 @@ $mail->Username = $creds[0]['username'];
 //Password to use for SMTP authentication
 $mail->Password = pl_decrypt_password($creds[0]['password']);
 //Set who the message is to be sent from
-$mail->setFrom('from@example.com', 'First Last');
+$mail->setFrom($creds[0]['username'], $creds[0]['name']);
 //Set an alternative reply-to address
-$mail->addReplyTo('replyto@example.com', 'First Last');
+$mail->addReplyTo($creds[0]['username'], $creds[0]['name']);
 //Set who the message is to be sent to
-$mail->addAddress($email_to, 'John Doe');
+$mail->addAddress($email_to, $email_to_name);
 //Set the subject line
-$mail->Subject = 'PHPMailer SMTP test';
+$mail->Subject = $email_subject;
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
 // $mail->msgHTML(file_get_contents('contents.html'), __DIR__);
 //Replace the plain text body with one created manually
 // $mail->AltBody = 'This is a plain-text message body';
 // Add email body
-$mail->Body = 'This is the body element.';
+$mail->Body = 'This is the body element.' . $message;
 //Attach an image file
 // $mail->addAttachment('images/phpmailer_mini.png');
 
@@ -137,12 +142,8 @@ if (!$mail->send()) {
     echo 'Message sent!';
 }
 
-  $token = pl_generate_user_token();
-  $private_link = home_url($page_slug . '?access_token=' . $token);
 
-  $message = 'Here is your private link: ' . $private_link;
 
-  // wp_mail($email_to, $email_subject, $message); //replace this with PHPMailer
 }
 
 //check user token for page access

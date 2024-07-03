@@ -8,7 +8,7 @@ function pl_encrypt_password($smtp_password) {
     return base64_encode($iv . $encrypted_password);
 }
 
-function pl_insert_smtp_data ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port) {
+function pl_insert_smtp_data ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port, $smtp_name) {
   //global wordpress db object
   global $wpdb;
   
@@ -17,12 +17,14 @@ function pl_insert_smtp_data ($smtp_host, $smtp_email, $hashed_pw, $smtp_passwor
     'host' => $smtp_host,
     'port' => $smtp_port,
     'username' => $smtp_email,
+    'name' => $smtp_name,
     'password' => $hashed_pw
   );
   //specify data types
   $data_types = array(
     '%s', //string
     '%d', //integer
+    '%s', //string
     '%s', //string
     '%s' //string
   );
@@ -67,6 +69,10 @@ function pl_render_smtp_settings_page() {
 <td><input type="password" name="smtp_password" required /></td>
 </tr>
 <tr>
+<th>First and Last Name (how it appears as "From" and "To")</th>
+<td><input type="text" name="smtp_name" required /></td>
+</tr>
+<tr>
 <td><input type="submit" name="submit" class="button-primary" value="Save Settings"</td>
 </tr>
 </table>
@@ -79,15 +85,17 @@ function pl_render_smtp_settings_page() {
     $smtp_port = intval($_POST['smtp_port']);
     $smtp_email = sanitize_email($_POST['smtp_email']);
     $smtp_password = sanitize_text_field($_POST['smtp_password']);
+    $smtp_name = sanitize_text_field($_POST['smtp_name']);
   } else {
     $smtp_host = '';
     $smtp_port = '';
     $smtp_email = '';
     $smtp_password = '';
+    $smtp_name = '';
   }
 
   //encrypt password
   $hashed_pw = pl_encrypt_password($smtp_password);
-  pl_insert_smtp_data($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port);
+  pl_insert_smtp_data($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port, $smtp_name);
 
 }
