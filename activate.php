@@ -26,7 +26,7 @@ function pl_activate_plugin() {
         port SMALLINT NOT NULL,
         username VARCHAR(100) NOT NULL,
         name VARCHAR(100) NOT NULL,
-        password VARCHAR(100) NOT NULL,
+        password VARCHAR(255) NOT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
 
