@@ -1,5 +1,6 @@
 <?php
-function pl_install() {
+
+function pl_activate_plugin() {
     global $wpdb;
 
     // Define table names
@@ -48,26 +49,32 @@ function pl_install() {
 
         // Check if the key already exists
         if (strpos($config_file, 'define(\'PL_ENCRYPTION_KEY\'') === false) {
-            $key_define = "\ndefine('PL_ENCRYPTION_KEY', '$key');\n";
 
-            // Insert the key before the "That's all, stop editing!" comment
-            $config_file = preg_replace(
-                '/(\/\* That\'s all, stop editing! Happy blogging. \*\/)/',
-                $key_define . '$1',
+            $key_define = "define('PL_ENCRYPTION_KEY', '$key');\n";
+
+            // Insert the key after the opening PHP tag
+            $new_config_file = preg_replace(
+                '/(<\?php\s+)/',
+                '$1' . $key_define,
                 $config_file
             );
 
-            // Write the updated config file
-            if (file_put_contents($config_path, $config_file) === false) {
-                // Handle the error if the file could not be written
+            // Attempt to write the updated config file
+            if (file_put_contents($config_path, $new_config_file) !== false) {
+                error_log('Successfully wrote to wp-config.php.');
+            } else {
+                error_log('Failed to write to wp-config.php.');
                 wp_die('Failed to write the encryption key to wp-config.php.');
             }
+        } else {
+            error_log('Encryption key already exists in wp-config.php.');
         }
     } else {
-        // Handle the error if the file is not writable
+        error_log('wp-config.php is not writable.');
         wp_die('The wp-config.php file is not writable.');
     }
 }
 
-pl_install();
-?>
+// Ensure the function is called during plugin activation
+pl_activate_plugin();
+
