@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.1
+ * Version: 0.1.2
  * Author: Matt Jones
  */
 
@@ -73,7 +73,7 @@ function pl_decrypt_password($encrypted_password) {
 }
 
 //Send email with private link
-function pl_send_private_link_email($email_to, $email_subject, $page_slug, $email_to_name) {
+function pl_send_private_link_email($email_to, $email_subject, $email_body, $page_slug, $email_to_name) {
 
   global $wpdb;
   $table = $wpdb->prefix . 'pl_smtp_creds';
@@ -126,7 +126,7 @@ $mail->Subject = $email_subject;
 //Replace the plain text body with one created manually
 // $mail->AltBody = 'This is a plain-text message body';
 // Add email body
-$mail->Body = 'This is the body element.' . $message;
+$mail->Body = $email_body . '\n' . $message;
 //Attach an image file
 // $mail->addAttachment('images/phpmailer_mini.png');
 
