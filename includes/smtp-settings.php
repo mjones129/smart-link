@@ -1,5 +1,14 @@
 <?php
-function encryption_test ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port) {
+
+function pl_encrypt_password($smtp_password) {
+    $encryption_key = PL_ENCRYPTION_KEY;
+    $iv_length = openssl_cipher_iv_length('aes-256-cbc');
+    $iv = openssl_random_pseudo_bytes($iv_length);
+    $encrypted_password = openssl_encrypt($smtp_password, 'aes-256-cbc', $encryption_key, 0, $iv);
+    return base64_encode($iv . $encrypted_password);
+}
+
+function pl_insert_smtp_data ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port, $smtp_name) {
   //global wordpress db object
   global $wpdb;
   
@@ -8,12 +17,14 @@ function encryption_test ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $
     'host' => $smtp_host,
     'port' => $smtp_port,
     'username' => $smtp_email,
+    'name' => $smtp_name,
     'password' => $hashed_pw
   );
   //specify data types
   $data_types = array(
     '%s', //string
     '%d', //integer
+    '%s', //string
     '%s', //string
     '%s' //string
   );
@@ -26,22 +37,12 @@ function encryption_test ($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $
     $creds_info,
     //define exactly which row to update
     array(
-      'id' => 0
+      'id' => 1
     ),
     //specify data types
     $data_types
     );
 
-  echo 'Hashed password: ' . $hashed_pw;  
-  echo '</br>';
-  echo 'Original password: ' . $smtp_password;
-  echo '</br>';
-  $verify = password_verify($smtp_password, $hashed_pw);
-  if($verify) {
-    echo 'Password VERIFIED!';
-  } else {
-    echo 'Unable to verify password.';
-  }
 }
 
 function pl_render_smtp_settings_page() {
@@ -68,6 +69,10 @@ function pl_render_smtp_settings_page() {
 <td><input type="password" name="smtp_password" required /></td>
 </tr>
 <tr>
+<th>First and Last Name (how it appears as "From" and "To")</th>
+<td><input type="text" name="smtp_name" required /></td>
+</tr>
+<tr>
 <td><input type="submit" name="submit" class="button-primary" value="Save Settings"</td>
 </tr>
 </table>
@@ -80,15 +85,17 @@ function pl_render_smtp_settings_page() {
     $smtp_port = intval($_POST['smtp_port']);
     $smtp_email = sanitize_email($_POST['smtp_email']);
     $smtp_password = sanitize_text_field($_POST['smtp_password']);
+    $smtp_name = sanitize_text_field($_POST['smtp_name']);
   } else {
     $smtp_host = '';
     $smtp_port = '';
     $smtp_email = '';
     $smtp_password = '';
+    $smtp_name = '';
   }
 
   //encrypt password
-  $hashed_pw = password_hash($smtp_password, PASSWORD_DEFAULT);
-  encryption_test($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port);
+  $hashed_pw = pl_encrypt_password($smtp_password);
+  pl_insert_smtp_data($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port, $smtp_name);
 
 }
