@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.7
+ * Version: 0.1.8
  * Author: Matt Jones
  */
 
@@ -91,7 +91,7 @@ function pl_send_private_link_email($email_to, $email_subject, $email_body, $pag
   $private_link = $private_link;
   $email_to_name = $email_to_name;
 
-  $email_content = require_once((__FILE__) . './includes/email-template.php');
+  $email_content = require_once(plugin_dir_path((__FILE__) . '/includes/email-template.php');
   ob_end_clean();
 
 //begin PHPmailer setup
