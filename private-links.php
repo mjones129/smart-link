@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.1
+ * Version: 0.1.11
  * Author: Matt Jones
  */
 
@@ -43,7 +43,7 @@ function pl_generate_user_token() {
   $expiration = date('Y-m-d H:i:s', strtotime('+1 day')); // Token valid for 1 day
 
   $wpdb->insert(
-    $wpdb->prefix . 'user_tokens',
+    $wpdb->prefix . 'pl_tokens',
     array(
       'token' => $token,
       'expiration' => $expiration,
@@ -51,10 +51,10 @@ function pl_generate_user_token() {
     ),
     //specify data types
     array(
-      '%d',
-      '%s',
-      '%s',
-      '%d'
+      '%s', //string
+      '%s', //string
+      '%s', //string
+      '%d' //integer
     )
   );
 
@@ -73,7 +73,7 @@ function pl_decrypt_password($encrypted_password) {
 }
 
 //Send email with private link
-function pl_send_private_link_email($email_to, $email_subject, $page_slug, $email_to_name) {
+function pl_send_private_link_email($email_to, $email_subject, $email_body, $page_slug, $email_to_name) {
 
   global $wpdb;
   $table = $wpdb->prefix . 'pl_smtp_creds';
@@ -84,6 +84,15 @@ function pl_send_private_link_email($email_to, $email_subject, $page_slug, $emai
   $private_link = home_url($page_slug . '?access_token=' . $token);
   $message = 'Here is your private link: ' . $private_link;
 
+  // Prepare variables for the email template
+  ob_start();
+  $email_subject = $email_subject;
+  $email_body = $email_body;
+  $private_link = $private_link;
+  $email_to_name = $email_to_name;
+
+  $email_content = require_once plugin_dir_path(__FILE__) . '/includes/email-template.php';
+  ob_end_clean();
 
 //begin PHPmailer setup
 
@@ -108,6 +117,10 @@ $mail->Host = $creds[0]['host'];
 $mail->Port = $creds[0]['port'];
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
+//define encryption
+$mail->SMTPSecure = 'ENCRYPTION_STARTTLS';
+//enable HTML
+$mail->isHTML(true);
 //Username to use for SMTP authentication
 $mail->Username = $creds[0]['username'];
 //Password to use for SMTP authentication
@@ -126,7 +139,7 @@ $mail->Subject = $email_subject;
 //Replace the plain text body with one created manually
 // $mail->AltBody = 'This is a plain-text message body';
 // Add email body
-$mail->Body = 'This is the body element.' . $message;
+$mail->Body = stripslashes($email_content); 
 //Attach an image file
 // $mail->addAttachment('images/phpmailer_mini.png');
 
