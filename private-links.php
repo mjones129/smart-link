@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.12
+ * Version: 0.1.13
  * Author: Matt Jones
  */
 
@@ -37,7 +37,7 @@ function pl_plugin_uninstall() {
 }
 
 // Generate and store token
-function pl_generate_user_token() {
+function pl_generate_user_token($page_slug) {
   global $wpdb;
   $token = bin2hex(random_bytes(16));
   $expiration = date('Y-m-d H:i:s', strtotime('+1 day')); // Token valid for 1 day
@@ -45,6 +45,7 @@ function pl_generate_user_token() {
   $wpdb->insert(
     $wpdb->prefix . 'pl_tokens',
     array(
+      'slug' => $page_slug,
       'token' => $token,
       'expiration' => $expiration,
       'used' => 0
@@ -80,7 +81,7 @@ function pl_send_private_link_email($email_to, $email_subject, $email_body, $pag
   $query = $wpdb->prepare("SELECT * FROM $table;");
   $creds = $wpdb->get_results($query, ARRAY_A);
 
-  $token = pl_generate_user_token();
+  $token = pl_generate_user_token($page_slug);
   $private_link = home_url($page_slug . '?access_token=' . $token);
   $message = 'Here is your private link: ' . $private_link;
 
