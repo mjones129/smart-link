@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.6
+ * Version: 0.1.7
  * Author: Matt Jones
  */
 
@@ -43,7 +43,7 @@ function pl_generate_user_token() {
   $expiration = date('Y-m-d H:i:s', strtotime('+1 day')); // Token valid for 1 day
 
   $wpdb->insert(
-    $wpdb->prefix . 'user_tokens',
+    $wpdb->prefix . 'pl_tokens',
     array(
       'token' => $token,
       'expiration' => $expiration,
