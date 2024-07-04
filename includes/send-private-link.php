@@ -31,7 +31,7 @@ height: 300px;
 <td><textarea class="table-height table-width" name="email_body" required ></textarea></td>
 </tr>
 <tr>
-<th>Private Page Slug (including leading and trailing slashes):</th>
+<th>Private Page Slug (no slashes):</th>
 <td><input class="table-width" type="text" name="page_slug" required /></td>
 </tr>
 </table>
