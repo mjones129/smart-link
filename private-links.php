@@ -160,53 +160,61 @@ if (!$mail->send()) {
 
 }
 
-//check user token for page access
+
+// Check user token for page access
 function pl_check_access_token() {
-  global $wpdb;
+    global $wpdb;
 
-  //select all the page slugs from the tokens table
-  $protected_slugs = $wpdb->get_col("SELECT slug FROM " . $wpdb->prefix . "pl_tokens");
-  error_log("Protected slugs: " . print_r($protected_slugs, true));
+    error_log("pl_check_access_token function called");
 
-  //only run on pages, not blog posts
-  if (is_page()) {
-    global $post;
-    $current_slug = $post->post_name;
-    error_log("Current slug: " . $current_slug);
-    
+    // Select all the page slugs from the tokens table
+    $protected_slugs = $wpdb->get_col("SELECT slug FROM " . $wpdb->prefix . "pl_tokens");
+    error_log("Protected slugs: " . print_r($protected_slugs, true));
 
-    //if current page exists in protected_slugs, check for token.
-    if(in_array($current_slug, $protected_slugs)) {
-      error_log("current_slug is in array protected_slugs.");
-      if(!isset($_GET['access_token'])) {
-        wp_redirect(home_url('/access-denied/'));
-        exit();
-      }
-      $token = $_GET['access_token'];
-      $current_time = current_time('mysql');
-      $token_entry = $wpdb->get_row(
-        $wpdb->prepare(
-          "SELECT * FROM " . $wpdb->prefix . "pl_tokens WHERE token = %s AND expiration > %s AND used = 0",
-          $token,
-          $current_time
-        )
-      );
+    // Only run on pages, not blog posts
+    if (is_page()) {
+        global $post;
+        error_log("Post object: " . print_r($post, true));
+        
+        $current_slug = $post->post_name;
+        error_log("Current slug: " . $current_slug);
 
-      if(!$token_entry) {
-        wp_redirect(home_url('/access-denied/'));
-        exit();
-      } else {
-        //Mark token as used
-        $wpdb->update(
-          $wpdb->prefix . 'pl_tokens',
-          array('used' => 1),
-          array('id' => $token_entry->id),
-          array('%d'),
-          array('%d')
-        );
-      }
+        // If current page exists in protected_slugs, check for token
+        if (in_array($current_slug, $protected_slugs)) {
+            error_log("current_slug is in array protected_slugs.");
+            if (!isset($_GET['access_token'])) {
+                wp_redirect(home_url('/access-denied/'));
+                exit();
+            }
+            $token = $_GET['access_token'];
+            $current_time = current_time('mysql');
+            $token_entry = $wpdb->get_row(
+                $wpdb->prepare(
+                    "SELECT * FROM " . $wpdb->prefix . "pl_tokens WHERE token = %s AND expiration > %s AND used = 0",
+                    $token,
+                    $current_time
+                )
+            );
+
+            if (!$token_entry) {
+                wp_redirect(home_url('/access-denied/'));
+                exit();
+            } else {
+                // Mark token as used
+                $wpdb->update(
+                    $wpdb->prefix . 'pl_tokens',
+                    array('used' => 1),
+                    array('id' => $token_entry->id),
+                    array('%d'),
+                    array('%d')
+                );
+            }
+        } else {
+            error_log("current_slug is NOT in array protected_slugs.");
+        }
+    } else {
+        error_log("Not a page.");
     }
-  }
 }
 add_action('template_redirect', 'pl_check_access_token');
 
