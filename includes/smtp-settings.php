@@ -95,9 +95,9 @@ function pl_render_smtp_settings_page() {
         $hashed_pw = pl_encrypt_password($smtp_password);
         //attempt data save
         if(pl_insert_smtp_data($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port, $smtp_name)) {
-          echo '<div class="notice notice-success is-dismissable"><p>SMTP data successfully updated.</p></div>';
+          echo '<div class="notice notice-success is-dismissible"><p>SMTP data successfully updated.</p></div>';
         } else {
-          echo '<div class="notice notice-error is-dismissable"><p>Failed to save SMTP data.</p></div>';
+          echo '<div class="notice notice-error is-dismissible"><p>Failed to save SMTP data.</p></div>';
         }
       }
   } else {
