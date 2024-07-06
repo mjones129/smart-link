@@ -41,7 +41,9 @@ function pl_insert_smtp_data ($smtp_host, $smtp_email, $hashed_pw, $smtp_passwor
     ),
     //specify data types
     $data_types
-    );
+  );
+
+  return true;
 
 }
 
@@ -81,11 +83,23 @@ function pl_render_smtp_settings_page() {
 <?php 
 
   if(isset($_POST['submit']) && check_admin_referer('smtp_settings_nonce', 'smtp_settings_nonce_field')) {
+    //capture form data
     $smtp_host = sanitize_text_field($_POST['smtp_host']);
     $smtp_port = intval($_POST['smtp_port']);
     $smtp_email = sanitize_email($_POST['smtp_email']);
     $smtp_password = sanitize_text_field($_POST['smtp_password']);
     $smtp_name = sanitize_text_field($_POST['smtp_name']);
+      //if a password is sent in the form data
+      if(isset($smtp_host) && isset($smtp_email) && isset($smtp_password)) {
+        //encrypt password
+        $hashed_pw = pl_encrypt_password($smtp_password);
+        //attempt data save
+        if(pl_insert_smtp_data($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port, $smtp_name)) {
+          echo '<div class="notice notice-success is-dismissible"><p>SMTP data successfully updated.</p></div>';
+        } else {
+          echo '<div class="notice notice-error is-dismissible"><p>Failed to save SMTP data.</p></div>';
+        }
+      }
   } else {
     $smtp_host = '';
     $smtp_port = '';
@@ -93,14 +107,4 @@ function pl_render_smtp_settings_page() {
     $smtp_password = '';
     $smtp_name = '';
   }
-
-  if(isset($smtp_host) && isset($smtp_email) && isset($smtp_password)) {
-    //encrypt password
-    $hashed_pw = pl_encrypt_password($smtp_password);
-    pl_insert_smtp_data($smtp_host, $smtp_email, $hashed_pw, $smtp_password, $smtp_port, $smtp_name);
-    echo '<div class="notice notice-success is-dismissable"><p>SMTP data successfully updated.</p></div>';
-  } else {
-    echo '<div class="notice notice-error is-dismissable"><p>Failed to save SMTP data.</p></div>';
-  }
-
 }
