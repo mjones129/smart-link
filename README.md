@@ -61,9 +61,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Private Links Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `mjones129`, `private-links`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -71,14 +70,10 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+* ![Static Badge](https://img.shields.io/badge/PHP-8.2-green?style=for-the-badge)
+* ![Static Badge](https://img.shields.io/badge/2.7-blue?style=for-the-badge&label=Composer)
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -87,32 +82,24 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This is a WordPress plugin that allows you to send SMTP authenticated emails that contain private links.
+When the link is sent to the recipiant, the page only becomes accessible via the private link.
+The link is only useable once in 24 hours. Attempts to access protected pages without the access token,
+with an expired token, or a token that has already been used will be denied.
 
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* WordPress 6.5.5 or higher
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/mjones129/private-links.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+1. Download the `private-links.zip` from the Releases section.
+
+2. Plugins page > Add New > Upload
+
+3. Install & Activate
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -121,7 +108,11 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+In order to successfully send emails, you'll first need to set up your SMTP credentials. You can do this from the SMTP Settings page.
+
+![SMTP settings](images/smtp-settings.png)
+
+After your SMTP credentials have been successfully saved, you are now ready to send private links. To send an email containing a private link, simply click "Private Links" and fill out the all the fields. 
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
@@ -132,10 +123,9 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Add a BCC field 
+- [ ] Add email notifications when private links are clicked
+- [ ] Schedule emails for later delivery 
 
 See the [open issues](https://github.com/mjones129/private-links/issues) for a full list of proposed features (and known issues).
 
@@ -173,20 +163,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
 Project Link: [https://github.com/mjones129/private-links](https://github.com/mjones129/private-links)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -206,7 +183,7 @@ Project Link: [https://github.com/mjones129/private-links](https://github.com/mj
 [license-url]: https://github.com/mjones129/private-links/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: images/screenshot1.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
