@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.29
+ * Version: 0.1.30
  * Author: Matt Jones
  */
 
@@ -44,10 +44,10 @@ function pl_first_time_redirect() {
 
     if($first_time == '1') {
       // Update the first_time value to prevent subsequent redirects
-      $wpdb->update($pl_smtp_creds, ['first_time' => 0], ['id' => 1]);
+      // $wpdb->update($pl_smtp_creds, ['first_time' => 0], ['id' => 1]);
 
-      wp_safe_redirect(admin_url('admin.php?page=smtp-settings'));
-      exit;
+      // wp_safe_redirect(admin_url('admin.php?page=smtp-settings'));
+      // exit;
     }
 }
 add_action('admin_init', 'pl_first_time_redirect');   
@@ -256,9 +256,46 @@ function pl_admin_menu() {
 }
 add_action('admin_menu', 'pl_admin_menu');
 
+// Handle AJAX request to retrieve first_time value
+add_action('wp_ajax_get_first_time', 'pl_get_first_time');
+
+function pl_get_first_time() {
+  global $wpdb;
+  $pl_smtp_creds = $wpdb->prefix . 'pl_smtp_creds';
+  $first_time = $wpdb->get_var("SELECT first_time FROM $pl_smtp_creds WHERE id = 1");
+
+  wp_send_json_success(array('first_time' => $first_time));
+}
+
+// Handle AJAX request to update first_time value
+add_action('wp_ajax_update_first_time', 'pl_update_first_time');
+
+function pl_update_first_time() {
+  check_ajax_referer('pl_ajax_nonce', 'nonce');
+
+  global $wpdb;
+  $pl_smtp_creds = $wpdb->prefix . 'pl_smtp_creds';
+  $result = $wpdb->update($pl_smtp_creds, ['first_time' => 0], ['id' => 1]);
+
+  if ($result !== false) {
+    wp_send_json_success();
+  } else {
+    wp_send_json_error('Failed to update first_time');
+  }
+}
+
+
 //enqueue stylesheet on smtp settings page
 function pl_smtp_styles() {
   wp_register_style('pl_style', plugin_dir_url(__FILE__) . '/css/pl-style.css', array(), '1.0', 'all');
+  wp_register_style('bootstrap5', plugin_dir_url(__FILE__) . '/vendor/twbs/bootstrap/dist/css/bootstrap.min.css');
   wp_enqueue_style('pl_style');
+  wp_enqueue_style('bootstrap5');
+  wp_enqueue_script('bootstrapjs', plugin_dir_url(__FILE__) . '/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', array() );
+  wp_enqueue_script('pl_first_time_check', plugin_dir_url(__FILE__) . '/js/first-time-check.js', array('jquery'), null, true);
+  wp_localize_script('pl_first_time_check', 'pl_ajax_object', array(
+    'ajax_url' => admin_url('admin-ajax.php'),
+    'nonce' => wp_create_nonce('pl_ajax_nonce')
+  ));
 }
 add_action('admin_enqueue_scripts', 'pl_smtp_styles');

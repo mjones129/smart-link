@@ -1,3 +1,12 @@
-.pl-body {
-  background-color: green;
+@font-face {
+  font-family: geist;
+  src: url('./fonts/GeistVF.woff2');
 }
+
+.pl-form h1 {
+  font-family: geist;
+}
+
+.pl-form h1, .pl-form form input, .pl-form form table tbody tr th {
+  font-family: geist;
+} 

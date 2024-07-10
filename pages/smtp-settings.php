@@ -49,30 +49,32 @@ function pl_insert_smtp_data ($smtp_host, $smtp_email, $hashed_pw, $smtp_passwor
 
 function pl_render_smtp_settings_page() {
 ?>
-<div class="wrap pl-body">
+
+
+<div class="wrap pl-form">
 <h1>Enter Your SMTP Settings.</h1>
 <form method="post" action="">
 <?php wp_nonce_field('smtp_settings_nonce', 'smtp_settings_nonce_field'); ?>
 <table class="form-table">
 <tr>
 <th>SMTP Host</th>
-<td><input type="text" name="smtp_host" required /></td>
+<td><input class="form-control form-control-lg" type="text" name="smtp_host" required /></td>
 </tr>
 <tr>
 <th>SMTP Port Number</th>
-<td><input type="number" name="smtp_port" required /></td>
+<td><input class="form-control form-control-lg" type="number" name="smtp_port" required /></td>
 </tr>
 <tr>
 <th>SMTP username/email</th>
-<td><input type="email" name="smtp_email" required /></td>
+<td><input class="form-control form-control-lg" type="email" name="smtp_email" required /></td>
 </tr>
 <tr>
 <th>SMTP password</th>
-<td><input type="password" name="smtp_password" required /></td>
+<td><input class="form-control form-control-lg" type="password" name="smtp_password" required /></td>
 </tr>
 <tr>
 <th>First and Last Name (how it appears as "From" and "To")</th>
-<td><input type="text" name="smtp_name" required /></td>
+<td><input class="form-control form-control-lg" type="text" name="smtp_name" required /></td>
 </tr>
 <tr>
 <td><input type="submit" name="submit" class="button-primary" value="Save Settings"</td>

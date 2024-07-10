@@ -1,38 +1,50 @@
 <?php
 function pl_admin_page() {
 ?>
-<style>
-.table-width {
-width: 500px;
-}
-.table-height {
-height: 300px;
-}
-</style>
-<div class="wrap">
+
+<!-- Modal -->
+<div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Smart Link Pro Setup</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       Thanks for installing Smart Link Pro! Enter your SMTP credentials to get started. 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Awesome</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="wrap pl-form">
 <h1>Send Private Link Email</h1>
 <form method="post" action="">
 <?php wp_nonce_field('send_private_link_email_nonce', 'send_private_link_email_nonce_field'); ?>
 <table class="form-table">
 <tr valign="top">
 <th>Send Email To:</th>
-<td><input class="table-width" type="email" name="email_to" required /></td>
+<td><input class="form-control form-control-lg" type="email" name="email_to" required /></td>
 </tr>
 <tr>
 <th>Recipiant Full Name:</th>
-<td><input class="table-width" type="text" name="email_to_name" required /></td>
+<td><input class="form-control form-control-lg" type="text" name="email_to_name" required /></td>
 </tr>
 <tr>
 <th scope="row">Email Subject:</th>
-<td><input class="table-width" type="text" name="email_subject" required /></td>
+<td><input class="form-control form-control-lg" type="text" name="email_subject" required /></td>
 </tr>
 <tr>
 <th>Email Body:</th>
-<td><textarea class="table-height table-width" name="email_body" required ></textarea></td>
+<td><textarea class="form-control form-control-lg" name="email_body" required ></textarea></td>
 </tr>
 <tr>
 <th>Private Page Slug (no slashes):</th>
-<td><input class="table-width" type="text" name="page_slug" required /></td>
+<td><input class="form-control form-control-lg" type="text" name="page_slug" required /></td>
 </tr>
 </table>
 <input type="submit" name="submit" class="button-primary" value="Send Email" />
