@@ -28,6 +28,8 @@ jQuery(document).ready(function($) {
       success: function(response) {
         if (response.success) {
           console.log('first_time updated to 0');
+          //Redirect to SMTP settings page
+          window.location.href = pl_ajax_object.redirect_url;
         } else {
           console.error('Failed to update first_time');
         }

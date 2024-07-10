@@ -295,7 +295,8 @@ function pl_smtp_styles() {
   wp_enqueue_script('pl_first_time_check', plugin_dir_url(__FILE__) . '/js/first-time-check.js', array('jquery'), null, true);
   wp_localize_script('pl_first_time_check', 'pl_ajax_object', array(
     'ajax_url' => admin_url('admin-ajax.php'),
-    'nonce' => wp_create_nonce('pl_ajax_nonce')
+    'nonce' => wp_create_nonce('pl_ajax_nonce'),
+    'redirect_url' => admin_url('admin.php?page=smtp-settings')
   ));
 }
 add_action('admin_enqueue_scripts', 'pl_smtp_styles');
