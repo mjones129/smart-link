@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.27
+ * Version: 0.1.28
  * Author: Matt Jones
  */
 
@@ -42,7 +42,7 @@ function pl_first_time_redirect() {
   $pl_smtp_creds = $wpdb->prefix . 'pl_smtp_creds';
   $first_time = $wpdb->get_var("SELECT first_time FROM $pl_smtp_creds WHERE id = 1");
 
-    if($first_time === 1) {
+    if($first_time == '1') {
       // Update the first_time value to prevent subsequent redirects
       $wpdb->update($pl_smtp_creds, ['first_time' => 0], ['id' => 1]);
 
