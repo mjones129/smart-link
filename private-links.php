@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
 include_once plugin_dir_path(__FILE__) . '/pages/smtp-settings.php';
 
 //include the send private link page
-include_once plugin_dir_path(__FILE__) . '/includes/send-private-link.php';
+include_once plugin_dir_path(__FILE__) . '/pages/send-private-link.php';
 
 //plugin setup
 register_activation_hook(__FILE__,  'pl_plugin_activate');
