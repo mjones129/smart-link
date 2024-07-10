@@ -87,9 +87,9 @@ function pl_activate_plugin() {
     }
     
 
-    
 }
 
 // Ensure the function is called during plugin activation
 pl_activate_plugin();
+
 
