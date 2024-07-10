@@ -87,7 +87,7 @@ function pl_activate_plugin() {
     }
     
 
-    $first_time = $wpdb->get_var("SELECT first_time FROM TABLE " . $wpdb->prefix . "pl_smtp_creds WHERE id = 1");
+    $first_time = $wpdb->get_var("SELECT first_time FROM $pl_smtp_creds WHERE id = 1");
 
     if($first_time === 1) {
       // Update the first_time value to prevent subsequent redirects
