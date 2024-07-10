@@ -45,6 +45,8 @@ function pl_activate_plugin() {
 
     $charset_collate = $wpdb->get_charset_collate();
 
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
     if($wpdb->get_var("SHOW TABLES LIKE '$pl_tokens'") != $pl_tokens) {
       // SQL to create the tokens table
       $sql = "CREATE TABLE $pl_tokens (
@@ -84,11 +86,13 @@ function pl_activate_plugin() {
 
     }
     
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-    $first_time = $wpdb->get_col("SELECT first_time FROM TABLE " . $wpdb->prefix . "pl_smtp_creds");
+    $first_time = $wpdb->get_var("SELECT first_time FROM TABLE " . $wpdb->prefix . "pl_smtp_creds WHERE first_time = 1;");
 
     if($first_time === 1) {
+      // Update the first_time value to prevent subsequent redirects
+      $wpdb->update($pl_smtp_creds, ['first_time' => 0], ['id' => 1]);
+
       wp_safe_redirect(admin_url('admin.php?page=smtp-settings'));
       exit;
     }
