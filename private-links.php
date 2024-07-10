@@ -256,5 +256,9 @@ function pl_admin_menu() {
 }
 add_action('admin_menu', 'pl_admin_menu');
 
-
-?>
+//enqueue stylesheet on smtp settings page
+function pl_smtp_styles() {
+  wp_register_style('pl_style', plugin_dir_url(__FILE__) . '/css/pl-style.css', array(), '1.0', 'all');
+  wp_enqueue_style('pl_style');
+}
+add_action('admin_enqueue_scripts', 'pl_smtp_styles');

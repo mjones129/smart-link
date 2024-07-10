@@ -49,7 +49,7 @@ function pl_insert_smtp_data ($smtp_host, $smtp_email, $hashed_pw, $smtp_passwor
 
 function pl_render_smtp_settings_page() {
 ?>
-<div class="wrap">
+<div class="wrap pl-body">
 <h1>Enter Your SMTP Settings.</h1>
 <form method="post" action="">
 <?php wp_nonce_field('smtp_settings_nonce', 'smtp_settings_nonce_field'); ?>
