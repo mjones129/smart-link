@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.24
+ * Version: 0.1.25
  * Author: Matt Jones
  */
 
@@ -26,6 +26,16 @@ register_activation_hook(__FILE__,  'pl_plugin_activate');
 
 function pl_plugin_activate() {
   require_once plugin_dir_path(__FILE__) . 'activate.php';
+
+  $first_time = $wpdb->get_var("SELECT first_time FROM $pl_smtp_creds WHERE id = 1");
+
+    if($first_time === 1) {
+      // Update the first_time value to prevent subsequent redirects
+      $wpdb->update($pl_smtp_creds, ['first_time' => 0], ['id' => 1]);
+
+      wp_safe_redirect(admin_url('admin.php?page=smtp-settings'));
+      exit;
+    }
 }
 
 // drop db table on deletion

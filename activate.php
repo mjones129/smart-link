@@ -87,15 +87,7 @@ function pl_activate_plugin() {
     }
     
 
-    $first_time = $wpdb->get_var("SELECT first_time FROM $pl_smtp_creds WHERE id = 1");
-
-    if($first_time === 1) {
-      // Update the first_time value to prevent subsequent redirects
-      $wpdb->update($pl_smtp_creds, ['first_time' => 0], ['id' => 1]);
-
-      wp_safe_redirect(admin_url('admin.php?page=smtp-settings'));
-      exit;
-    }
+    
 }
 
 // Ensure the function is called during plugin activation
