@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.19
+ * Version: 0.1.20
  * Author: Matt Jones
  */
 
