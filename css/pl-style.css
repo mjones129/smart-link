@@ -10,3 +10,7 @@
 .pl-form h1, .pl-form form input, .pl-form form table tbody tr th {
   font-family: geist;
 } 
+
+.form-table tbody tr td textarea {
+  border: 1px solid #8c8f94;
+}
