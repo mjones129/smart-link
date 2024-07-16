@@ -240,18 +240,27 @@ function pl_admin_menu() {
     'Private Links', //page title
     'Private Links', //menu title
     'manage_options', //capability
-    'private-links', //menu slug
+    'send-email', //menu slug
     'pl_admin_page', //function to render the page
     'dashicons-admin-network' //icon (optional)
   );
   add_submenu_page(
-    'private-links', //parent slug
+    'send-email', //parent slug
+    'Email Link', //page title
+    'Email Link', //menu title
+    'manage_options', //capability
+    'send-email', //menu slug
+    'pl_admin_page', //function to render the page
+    1 //menu position
+  );
+  add_submenu_page(
+    'send-email', //parent slug
     'SMTP Settings', //page title
     'SMTP Settings', //menu title
     'manage_options', // capability
     'smtp-settings', //menu slug
     'pl_render_smtp_settings_page', //function to render the page
-    1 //menu position
+    2 //menu position
   );
 }
 add_action('admin_menu', 'pl_admin_menu');
