@@ -6,7 +6,7 @@ add_action( 'init', 'sl_register_email_template' );
 /**
  * Registers post types needed by the plugin.
  *
- * @since  1.0.0
+ * @since  0.1.31
  * @access public
  * @return void
  */
