@@ -1,5 +1,5 @@
 <?php
-
+echo 'Hello from sl-email-templte.php';
 
 /**
  * Registers post types needed by the plugin.
