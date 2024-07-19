@@ -1,8 +1,8 @@
 <?php
 
-global $wpdb;
-
 class SLinit {
+
+  global $wpdb;
 
   public function sl_create_tokens_table() {
     //get table name
