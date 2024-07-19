@@ -52,6 +52,6 @@ $init->sl_create_tokens_table();
 }
 
 // Ensure the function is called during plugin activation
-pl_activate_plugin();
+sl_activate_plugin();
 
 
