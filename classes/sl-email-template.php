@@ -1,7 +1,5 @@
 <?php
 
-# Register custom post types on the 'init' hook.
-add_action( 'init', 'sl_register_email_template' );
 
 /**
  * Registers post types needed by the plugin.
