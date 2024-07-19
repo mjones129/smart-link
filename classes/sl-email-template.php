@@ -216,3 +216,7 @@ function sl_register_email_template() {
 		$args      // Arguments for post type.
 	);
 }
+
+// Register custom post types on the 'init' hook.
+add_action( 'init', 'sl_register_email_template' );
+

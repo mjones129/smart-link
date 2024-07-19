@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.32
+ * Version: 0.1.33
  * Author: Matt Jones
  */
 
@@ -22,10 +22,8 @@ include_once plugin_dir_path(__FILE__) . '/pages/smtp-settings.php';
 include_once plugin_dir_path(__FILE__) . '/pages/send-private-link.php';
 
 //register custom post type for email templates
-include_once plugin_dir_path(__FILE__) . '/classes/sl-email-template.php';
+include plugin_dir_path(__FILE__) . '/classes/sl-email-template.php';
 
-// Register custom post types on the 'init' hook.
-add_action( 'init', 'sl_register_email_template' );
 
 
 //plugin setup
