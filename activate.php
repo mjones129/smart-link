@@ -3,9 +3,9 @@
 
 function pl_activate_plugin() {
 
-require_once(plugin_dir_path() . '/classes/sl-email-template.php');
+require_once(plugin_dir_path(__FILE__) . '/classes/sl-email-template.php');
 
-require_once(plugin_dir_path() . '/classes/slinit.class.php');
+require_once(plugin_dir_path(__FILE__) . '/classes/slinit.class.php');
 
 $init = new SLinit();
 
