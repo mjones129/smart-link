@@ -1,5 +1,7 @@
 <?php
 
+require_once(ABSPATH . '/wp-admin/includes/upgrade.php');
+
 class SLinit {
 
   public function sl_create_tokens_table() {
