@@ -2,9 +2,8 @@
 
 class SLinit {
 
-  global $wpdb;
-
   public function sl_create_tokens_table() {
+    global $wpdb;
     //get table name
     $sl_tokens = $wpdb->prefix . 'sl_tokens';
     $charset_collate = $wpdb->get_charset_collate();
@@ -28,6 +27,7 @@ class SLinit {
   } 
 
   public function sl_create_smtp_table() {
+    global $wpdb;
     //get table name
     $sl_smtp_creds = $wpdb->prefix . 'sl_smtp_creds';
     $charset_collate = $wpdb->get_charset_collate();
