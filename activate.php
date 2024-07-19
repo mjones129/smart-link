@@ -1,7 +1,7 @@
 <?php
 
 
-function pl_activate_plugin() {
+function sl_activate_plugin() {
 
 require_once(plugin_dir_path(__FILE__) . '/classes/sl-email-template.php');
 

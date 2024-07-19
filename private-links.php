@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Private Links
  * Description: Generate one-time-use links that expire after 24 hours. 
- * Version: 0.1.34
+ * Version: 0.1.35
  * Author: Matt Jones
  */
 
@@ -27,44 +27,42 @@ include plugin_dir_path(__FILE__) . '/classes/sl-email-template.php';
 
 
 //plugin setup
-register_activation_hook(__FILE__,  'pl_plugin_activate');
+register_activation_hook(__FILE__,  'sl_plugin_activate');
 
-function pl_plugin_activate() {
+function sl_plugin_activate() {
   require_once plugin_dir_path(__FILE__) . 'activate.php';
 }
 
 // drop db table on deletion
-register_uninstall_hook(__FILE__, 'pl_plugin_uninstall');
+register_uninstall_hook(__FILE__, 'sl_plugin_uninstall');
 
-function pl_plugin_uninstall() {
+function sl_plugin_uninstall() {
     // Path to the uninstall script
     require_once plugin_dir_path(__FILE__) . 'uninstall.php';
 }
 
 //redirect if first time
-function pl_first_time_redirect() {
+function sl_first_time_redirect() {
   global $wpdb;
-  $pl_smtp_creds = $wpdb->prefix . 'pl_smtp_creds';
-  $first_time = $wpdb->get_var("SELECT first_time FROM $pl_smtp_creds WHERE id = 1");
+  //check if creds table exists
+  if($wpdb->prefix . 'sl_smtp_creds') {
+    $sl_smtp_creds = $wpdb->prefix . 'sl_smtp_creds';
+    
+    $first_time = $wpdb->get_var("SELECT first_time FROM $sl_smtp_creds WHERE id = 1");
 
-    if($first_time == '1') {
-      // Update the first_time value to prevent subsequent redirects
-      // $wpdb->update($pl_smtp_creds, ['first_time' => 0], ['id' => 1]);
-
-      // wp_safe_redirect(admin_url('admin.php?page=smtp-settings'));
-      // exit;
-    }
+  }
+  
 }
-add_action('admin_init', 'pl_first_time_redirect');   
+add_action('admin_init', 'sl_first_time_redirect');   
 
 // Generate and store token
-function pl_generate_user_token($page_slug) {
+function sl_generate_user_token($page_slug) {
   global $wpdb;
   $token = bin2hex(random_bytes(16));
   $expiration = date('Y-m-d H:i:s', strtotime('+1 day')); // Token valid for 1 day
 
   $wpdb->insert(
-    $wpdb->prefix . 'pl_tokens',
+    $wpdb->prefix . 'sl_tokens',
     array(
       'slug' => $page_slug,
       'token' => $token,
@@ -98,11 +96,11 @@ function pl_decrypt_password($encrypted_password) {
 function pl_send_private_link_email($email_to, $email_subject, $email_body, $page_slug, $email_to_name) {
 
   global $wpdb;
-  $table = $wpdb->prefix . 'pl_smtp_creds';
+  $table = $wpdb->prefix . 'sl_smtp_creds';
   $query = $wpdb->prepare("SELECT * FROM $table;");
   $creds = $wpdb->get_results($query, ARRAY_A);
 
-  $token = pl_generate_user_token($page_slug);
+  $token = sl_generate_user_token($page_slug);
   $private_link = home_url($page_slug . '?access_token=' . $token);
   $message = 'Here is your private link: ' . $private_link;
 
@@ -183,13 +181,13 @@ if (!$mail->send()) {
 
 
 // Check user token for page access
-function pl_check_access_token() {
+function sl_check_access_token() {
     global $wpdb;
 
-    error_log("pl_check_access_token function called");
+    error_log("sl_check_access_token function called");
 
     // Select all the page slugs from the tokens table
-    $protected_slugs = $wpdb->get_col("SELECT slug FROM " . $wpdb->prefix . "pl_tokens");
+    $protected_slugs = $wpdb->get_col("SELECT slug FROM " . $wpdb->prefix . "sl_tokens");
     error_log("Protected slugs: " . print_r($protected_slugs, true));
 
     // Only run on pages, not blog posts
@@ -211,7 +209,7 @@ function pl_check_access_token() {
             $current_time = current_time('mysql');
             $token_entry = $wpdb->get_row(
                 $wpdb->prepare(
-                    "SELECT * FROM " . $wpdb->prefix . "pl_tokens WHERE token = %s AND expiration > %s AND used = 0",
+                    "SELECT * FROM " . $wpdb->prefix . "sl_tokens WHERE token = %s AND expiration > %s AND used = 0",
                     $token,
                     $current_time
                 )
@@ -223,7 +221,7 @@ function pl_check_access_token() {
             } else {
                 // Mark token as used
                 $wpdb->update(
-                    $wpdb->prefix . 'pl_tokens',
+                    $wpdb->prefix . 'sl_tokens',
                     array('used' => 1),
                     array('id' => $token_entry->id),
                     array('%d'),
@@ -237,10 +235,10 @@ function pl_check_access_token() {
         error_log("Not a page.");
     }
 }
-add_action('template_redirect', 'pl_check_access_token');
+add_action('template_redirect', 'sl_check_access_token');
 
 //add admin menu item
-function pl_admin_menu() {
+function sl_admin_menu() {
   add_menu_page(
     'Private Links', //page title
     'Private Links', //menu title
@@ -268,28 +266,28 @@ function pl_admin_menu() {
     2 //menu position
   );
 }
-add_action('admin_menu', 'pl_admin_menu');
+add_action('admin_menu', 'sl_admin_menu');
 
 // Handle AJAX request to retrieve first_time value
-add_action('wp_ajax_get_first_time', 'pl_get_first_time');
+add_action('wp_ajax_get_first_time', 'sl_get_first_time');
 
-function pl_get_first_time() {
+function sl_get_first_time() {
   global $wpdb;
-  $pl_smtp_creds = $wpdb->prefix . 'pl_smtp_creds';
-  $first_time = $wpdb->get_var("SELECT first_time FROM $pl_smtp_creds WHERE id = 1");
+  $sl_smtp_creds = $wpdb->prefix . 'sl_smtp_creds';
+  $first_time = $wpdb->get_var("SELECT first_time FROM $sl_smtp_creds WHERE id = 1");
 
   wp_send_json_success(array('first_time' => $first_time));
 }
 
 // Handle AJAX request to update first_time value
-add_action('wp_ajax_update_first_time', 'pl_update_first_time');
+add_action('wp_ajax_update_first_time', 'sl_update_first_time');
 
-function pl_update_first_time() {
+function sl_update_first_time() {
   check_ajax_referer('pl_ajax_nonce', 'nonce');
 
   global $wpdb;
-  $pl_smtp_creds = $wpdb->prefix . 'pl_smtp_creds';
-  $result = $wpdb->update($pl_smtp_creds, ['first_time' => 0], ['id' => 1]);
+  $sl_smtp_creds = $wpdb->prefix . 'sl_smtp_creds';
+  $result = $wpdb->update($sl_smtp_creds, ['first_time' => 0], ['id' => 1]);
 
   if ($result !== false) {
     wp_send_json_success();
@@ -300,7 +298,7 @@ function pl_update_first_time() {
 
 
 //enqueue stylesheet on smtp settings page
-function pl_smtp_styles() {
+function sl_smtp_styles() {
   wp_register_style('pl_style', plugin_dir_url(__FILE__) . '/css/pl-style.css', array(), '1.0', 'all');
   wp_register_style('bootstrap5', plugin_dir_url(__FILE__) . '/vendor/twbs/bootstrap/dist/css/bootstrap.min.css');
   wp_enqueue_style('pl_style');
@@ -313,4 +311,4 @@ function pl_smtp_styles() {
     'redirect_url' => admin_url('admin.php?page=smtp-settings')
   ));
 }
-add_action('admin_enqueue_scripts', 'pl_smtp_styles');
+add_action('admin_enqueue_scripts', 'sl_smtp_styles');
