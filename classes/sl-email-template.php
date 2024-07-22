@@ -1,5 +1,4 @@
 <?php
-echo 'Hello from sl-email-templte.php';
 
 /**
  * Registers post types needed by the plugin.
@@ -50,7 +49,7 @@ function sl_register_email_template() {
 
 		// The URI to the icon to use for the admin menu item or a dashicon class. See:
 		// https://developer.wordpress.org/resource/dashicons/
-		'menu_icon'           => null, // string (defaults to use the post icon)
+		'menu_icon'           => 'dashicons-email', // string (defaults to use the post icon)
 
 		// Whether the posts of this post type can be exported via the WordPress import/export plugin
 		// or a similar plugin.
@@ -217,6 +216,4 @@ function sl_register_email_template() {
 	);
 }
 
-// Register custom post types on the 'init' hook.
-add_action( 'init', 'sl_register_email_template' );
 
