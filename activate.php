@@ -14,8 +14,6 @@ $init->sl_create_smtp_table();
 
 $init->sl_generate_encryption_key();    
 
-sl_register_email_template();
-
 }
 
 // Ensure the function is called during plugin activation
