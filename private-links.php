@@ -29,6 +29,8 @@ function sl_plugin_activate() {
   require_once plugin_dir_path(__FILE__) . 'activate.php';
 }
 
+require_once plugin_dir_path(__FILE__) . '/classes/sl-email-template.php';
+
 // drop db table on deletion
 register_uninstall_hook(__FILE__, 'sl_plugin_uninstall');
 
