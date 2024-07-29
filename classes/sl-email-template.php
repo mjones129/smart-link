@@ -211,9 +211,9 @@ function sl_register_email_template() {
 
 	// Register the post type.
 	register_post_type(
-		'Template', // Post type name. Max of 20 characters. Uppercase and spaces not allowed.
+		'email_template', // Post type name. Max of 20 characters. Uppercase and spaces not allowed.
 		$args      // Arguments for post type.
 	);
 }
 
-
+add_action('init', 'sl_register_email_template');
