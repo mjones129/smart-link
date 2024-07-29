@@ -22,7 +22,7 @@ include_once plugin_dir_path(__FILE__) . '/pages/smtp-settings.php';
 include_once plugin_dir_path(__FILE__) . '/pages/send-private-link.php';
 
 //register custom post type for email templates
-include plugin_dir_path(__FILE__) . '/classes/sl-email-template.php';
+include_once plugin_dir_path(__FILE__) . '/classes/sl-email-template.php';
 
 
 
