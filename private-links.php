@@ -27,8 +27,9 @@ require_once plugin_dir_path(__FILE__) . '/classes/sl-email-template.php';
 register_activation_hook(__FILE__,  'sl_plugin_activate');
 
 function sl_plugin_activate() {
-  require_once plugin_dir_path(__FILE__) . 'activate.php';
   sl_register_email_template();
+  require_once plugin_dir_path(__FILE__) . 'activate.php';
+  sl_activate_plugion();
   flush_rewrite_rules();
 }
 

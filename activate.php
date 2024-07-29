@@ -14,7 +14,5 @@ $init->sl_generate_encryption_key();
 
 }
 
-// Ensure the function is called during plugin activation
-sl_activate_plugin();
 
 
