@@ -29,7 +29,7 @@ register_activation_hook(__FILE__,  'sl_plugin_activate');
 function sl_plugin_activate() {
   sl_register_email_template();
   require_once plugin_dir_path(__FILE__) . 'activate.php';
-  sl_activate_plugion();
+  sl_activate_plugin();
   flush_rewrite_rules();
 }
 
