@@ -21,15 +21,16 @@ require_once plugin_dir_path(__FILE__) . '/pages/smtp-settings.php';
 //include the send private link page
 require_once plugin_dir_path(__FILE__) . '/pages/send-private-link.php';
 
+require_once plugin_dir_path(__FILE__) . '/classes/sl-email-template.php';
 
 //plugin setup
 register_activation_hook(__FILE__,  'sl_plugin_activate');
 
 function sl_plugin_activate() {
   require_once plugin_dir_path(__FILE__) . 'activate.php';
+  sl_register_email_template();
+  flush_rewrite_rules();
 }
-
-require_once plugin_dir_path(__FILE__) . '/classes/sl-email-template.php';
 
 // drop db table on deletion
 register_uninstall_hook(__FILE__, 'sl_plugin_uninstall');

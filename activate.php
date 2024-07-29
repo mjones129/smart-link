@@ -2,8 +2,6 @@
 
 function sl_activate_plugin() {
 
-require_once(plugin_dir_path(__FILE__) . '/classes/sl-email-template.php');
-
 require_once(plugin_dir_path(__FILE__) . '/classes/slinit.class.php');
 
 $init = new SLinit();
