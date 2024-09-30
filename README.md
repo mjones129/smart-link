@@ -9,7 +9,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/mjones129/private-links">
-    <img src="/images/privatelinkslogo-lock.png" alt="Logo" width="80" height="80">
+    <img src="/images/smartlinklogo-512-alpha.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Private Links</h3>
