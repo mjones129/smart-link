@@ -90,7 +90,7 @@ function sl_generate_user_token($page_slug)
 
 
 //full private link
-$private_link = home_url($page_slug . '?access_token=' . $token);
+//$private_link = home_url($page_slug . '?access_token=' . $token);
 
 
 
