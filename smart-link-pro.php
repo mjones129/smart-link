@@ -87,17 +87,6 @@ function sl_generate_user_token($page_slug)
   return $token;
 }
 
-//decrypt password
-function pl_decrypt_password($encrypted_password)
-{
-  $encryption_key = PL_ENCRYPTION_KEY;
-  $data = base64_decode($encrypted_password);
-  $iv_length = openssl_cipher_iv_length('aes-256-cbc');
-  $iv = substr($data, 0, $iv_length);
-  $encrypted_password = substr($data, $iv_length);
-  $decrypted_password = openssl_decrypt($encrypted_password, 'aes-256-cbc', $encryption_key, 0, $iv);
-  return $decrypted_password;
-}
 
 //Send email with private link
 function pl_send_private_link_email($email_to, $email_subject, $email_body, $page_slug, $email_to_name)
