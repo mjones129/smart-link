@@ -233,7 +233,6 @@ function sl_smtp_styles()
     false,
     1
   );
-  wp_enqueue_script('bootstrapjs', plugin_dir_url(__FILE__) . '/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', array());
   wp_enqueue_script('pl_first_time_check', plugin_dir_url(__FILE__) . '/js/first-time-check.js', array('jquery'), null, true);
   wp_localize_script('pl_first_time_check', 'pl_ajax_object', array(
     'ajax_url' => admin_url('admin-ajax.php'),
