@@ -16,6 +16,10 @@ if (!defined('ABSPATH')) {
   exit; //Exit if accessed directly
 }
 
+// Register sidebar button
+
+
+
 
 //include the smtp settings page
 require_once(plugin_dir_path(__FILE__) . '/pages/smtp-settings.php');
@@ -222,6 +226,13 @@ function sl_smtp_styles()
   wp_register_style('bootstrap5', plugin_dir_url(__FILE__) . '/vendor/twbs/bootstrap/dist/css/bootstrap.min.css');
   wp_enqueue_style('pl_style');
   wp_enqueue_style('bootstrap5');
+  wp_enqueue_script(
+    'my-custom-component',
+    plugins_url('/js/sidebar.js', __FILE__),
+    ['wp-blocks', 'wp-i18n', 'wp-element'],
+    false,
+    1
+  );
   wp_enqueue_script('bootstrapjs', plugin_dir_url(__FILE__) . '/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', array());
   wp_enqueue_script('pl_first_time_check', plugin_dir_url(__FILE__) . '/js/first-time-check.js', array('jquery'), null, true);
   wp_localize_script('pl_first_time_check', 'pl_ajax_object', array(
@@ -231,3 +242,18 @@ function sl_smtp_styles()
   ));
 }
 add_action('admin_enqueue_scripts', 'sl_smtp_styles');
+
+
+//add custom button to the gutenberg editor
+function add_button_to_gutenberg_toolbar($settings)
+{
+  $settings['items'][] = [
+    'id' => 'custom-button', // This should be a unique identifier for your button
+    'title' => 'Click Me',
+    'description' => '',
+    'icon' => 'wordpress', // Replace with the icon of your choice
+    'onclick' => "window.open('https://your-link-here.com', '_blank')", // Add your desired action here (e.g., open a new window)
+  ];
+  return $settings;
+}
+add_filter('block_editor_settings_all', 'add_button_to_gutenberg_toolbar');
