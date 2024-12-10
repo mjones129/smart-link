@@ -49,7 +49,6 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -164,15 +163,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 Your Name - [@mattjonestech](https://twitter.com/mattjonestech) - <email@email_client.com>
 
 Project Link: [https://github.com/mjones129/private-links](https://github.com/mjones129/private-links)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
