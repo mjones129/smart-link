@@ -17,7 +17,20 @@ if (!defined('ABSPATH')) {
 
 // Register sidebar button
 
-
+// add a link to the WP Toolbar
+function custom_toolbar_link($wp_admin_bar) {
+    $args = array(
+        'id' => 'smartLinkPro',
+        'title' => 'Smart Link Pro', 
+        'href' => 'https://smartlinkpro.io', 
+        'meta' => array(
+            'class' => 'wpbeginner', 
+            'title' => 'Go to Smart Link Pro'
+            )
+    );
+    $wp_admin_bar->add_node($args);
+}
+add_action('admin_bar_menu', 'custom_toolbar_link', 999);
 
 
 //include the smtp settings page
