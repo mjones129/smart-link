@@ -2,15 +2,17 @@
 
 require_once(ABSPATH . '/wp-admin/includes/upgrade.php');
 
-class SLinit {
+class SLinit
+{
 
-  public function sl_create_tokens_table() {
+  public function sl_create_tokens_table()
+  {
     global $wpdb;
     //get table name
     $sl_tokens = $wpdb->prefix . 'sl_tokens';
     $charset_collate = $wpdb->get_charset_collate();
     //check if tokens table exists
-    if($wpdb->get_var("SHOW TABLES LIKE '$sl_tokens'") != $sl_tokens) {
+    if ($wpdb->get_var("SHOW TABLES LIKE '$sl_tokens'") != $sl_tokens) {
       // SQL to create the tokens table
       $sql = "CREATE TABLE $sl_tokens (
         id INT NOT NULL AUTO_INCREMENT,
@@ -22,14 +24,8 @@ class SLinit {
         UNIQUE (token)
       ) $charset_collate;";
 
-      dbDelta($sql);  
-  
+      dbDelta($sql);
     }
-  
-  } 
+  }
 
 }
-
-
-
-
