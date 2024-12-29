@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.3
+ * Version: 0.3.3
  * Author: Matt Jones
  * Update URI: https://mattjones.tech/hello/info.json
  */
@@ -16,6 +16,12 @@ if (!defined('ABSPATH')) {
 }
 
 // Register sidebar button
+function sl_load_column() {
+    require_once plugin_dir_path(__FILE__) . '/classes/sl_columns.php';
+    $columns = new SLColumns();
+    $columns->sl_add();
+}
+add_action('wp_loaded', 'sl_load_column');
 
 // add a link to the WP Toolbar
 function custom_toolbar_link($wp_admin_bar) {
