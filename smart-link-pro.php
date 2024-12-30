@@ -83,6 +83,8 @@ function sl_first_time_redirect()
 add_action('admin_init', 'sl_first_time_redirect');
 
 // Generate and store token
+//TODO: accept post ID instead, pull slug from ID
+
 function sl_generate_user_token($page_slug)
 {
     global $wpdb;
