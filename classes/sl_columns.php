@@ -4,7 +4,7 @@ class SLColumns
 {
     public function sl_add()
     {
-        add_filter('post_row_actions', array($this, 'sl_add_link_button'), 10, 2);
+        // add_filter('post_row_actions', array($this, 'sl_add_link_button'), 10, 2);
         add_filter('page_row_actions', array($this, 'sl_add_link_button'), 10, 2);
     }
 
