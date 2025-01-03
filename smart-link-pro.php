@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.0
+ * Version: 0.4.1
  * Author: Matt Jones
  * Update URI: https://mattjones.tech/hello/info.json
  */
@@ -85,15 +85,18 @@ add_action('admin_init', 'sl_first_time_redirect');
 // Generate and store token
 //TODO: accept post ID instead, pull slug from ID
 
-function sl_generate_user_token($page_slug)
+function sl_generate_user_token($page_ID)
 {
     global $wpdb;
+    global $post;
+    $page_slug = $post->post_name;
     $token = bin2hex(random_bytes(16));
     $expiration = date('Y-m-d H:i:s', strtotime('+1 day')); // Token valid for 1 day
 
     $wpdb->insert(
         $wpdb->prefix . 'sl_tokens',
         array(
+        'page_ID' => $page_ID,
         'slug' => $page_slug,
         'token' => $token,
         'expiration' => $expiration,
@@ -243,7 +246,7 @@ function sl_update_first_time()
 function sl_smtp_styles()
 {
     wp_register_style('pl_style', plugin_dir_url(__FILE__) . '/css/pl-style.css', array(), '1.0', 'all');
-    wp_register_style('bootstrap5', plugin_dir_url(__FILE__) . '/vendor/twbs/bootstrap/dist/css/bootstrap.min.css');
+    wp_register_style('bootstrap5', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
     wp_enqueue_style('pl_style');
     wp_enqueue_style('bootstrap5');
     wp_enqueue_script(
@@ -268,6 +271,8 @@ function sl_smtp_styles()
         null,
         true
     );
+    //convert post ID to URL
+
 }
 add_action('admin_enqueue_scripts', 'sl_smtp_styles');
 
