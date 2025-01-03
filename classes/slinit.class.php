@@ -16,10 +16,12 @@ class SLinit
       // SQL to create the tokens table
       $sql = "CREATE TABLE $sl_tokens (
         id INT NOT NULL AUTO_INCREMENT,
+        page_ID INT NOT NULL,
         slug VARCHAR(255) NOT NULL,
         token VARCHAR(32) NOT NULL,
         expiration DATETIME NOT NULL,
         used TINYINT DEFAULT 0,
+        first_time TINYINT DEFAULT 1,
         PRIMARY KEY (id),
         UNIQUE (token)
       ) $charset_collate;";
