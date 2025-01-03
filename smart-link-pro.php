@@ -4,12 +4,7 @@
  * Description: Generate one-time-use links that expire after 24 hours.
  * Version: 0.4.1
  * Author: Matt Jones
- * Update URI: https://mattjones.tech/hello/info.json
  */
-
-//Import the PHPMailer class into the global namespace
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 
 if (!defined('ABSPATH')) {
     exit; //Exit if accessed directly
@@ -231,7 +226,7 @@ function sl_update_first_time()
     check_ajax_referer('pl_ajax_nonce', 'nonce');
 
     global $wpdb;
-    $sl_smtp_creds = $wpdb->prefix . 'sl_smtp_creds';
+    $sl_smtp_creds = $wpdb->prefix . 'sl_tokens';
     $result = $wpdb->update($sl_smtp_creds, ['first_time' => 0], ['id' => 1]);
 
     if ($result !== false) {
