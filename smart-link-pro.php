@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.1
+ * Version: 0.4.7
  * Author: Matt Jones
  */
 
@@ -83,6 +83,7 @@ add_action('admin_init', 'sl_first_time_redirect');
 function sl_generate_user_token($page_ID)
 {
     global $wpdb;
+    // $post = get_post($page_ID);
     global $post;
     $page_slug = $post->post_name;
     $token = bin2hex(random_bytes(16));
@@ -105,8 +106,9 @@ function sl_generate_user_token($page_ID)
           '%d' //integer
         )
     );
-
-    return $token;
+    echo 'page slug: ' . $page_slug;
+    $tokenized_link = esc_url(home_url($page_slug . '?access_token=' . $token));
+    return $tokenized_link;
 }
 
 
@@ -236,6 +238,13 @@ function sl_update_first_time()
     }
 }
 
+//because 'jsID' won't be defined unless the user clicks the copy link button, this will always generate a warning.
+// if (isset($_POST['jsID'])) {
+//     $selected_ID = $_POST['jsID'];
+// } else {
+//     $selected_ID = "";
+// }
+
 
 //enqueue stylesheet on smtp settings page
 function sl_smtp_styles()
@@ -267,6 +276,9 @@ function sl_smtp_styles()
         true
     );
     //convert post ID to URL
+    // $tokenized_link = sl_generate_user_token($selected_ID);
+
+    // wp_localize_script('copy-private-link', 'tokenizedLink', $tokenized_link);
 
 }
 add_action('admin_enqueue_scripts', 'sl_smtp_styles');
