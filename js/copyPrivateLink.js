@@ -20,6 +20,10 @@ function generateToken() {
     return token;
 }
 
+function saveToken() {
+    //since you can't directly write to the database from JS, we'll need to use AJAX to send the token to the server
+}
+
 function sl_column_button_action(){
         jQuery('a[id^="sl-copy-link-"]').filter(function() {
             return this.id.match(/^sl-copy-link-\d+$/);
@@ -38,8 +42,6 @@ function sl_column_button_action(){
                 }
             });
         
-            // alert(`post ID: ${post_id}`);
-            // alert(`tokenized link: ${tokenizedLink}`);
         });
 }
 
