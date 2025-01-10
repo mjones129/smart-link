@@ -9,8 +9,6 @@ function sl_activate_plugin()
 
     $init->sl_create_tokens_table();
 
-    $init->sl_create_smtp_table();
-
-    $init->sl_generate_encryption_key();
-
 }
+
+
