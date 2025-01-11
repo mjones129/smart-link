@@ -40,8 +40,6 @@ require_once(plugin_dir_path(__FILE__) . '/pages/smtp-settings.php');
 //include the send private link page
 require_once(plugin_dir_path(__FILE__) . '/pages/send-private-link.php');
 
-require_once(plugin_dir_path(__FILE__) . '/classes/sl-email-template.php');
-
 //plugin setup
 register_activation_hook(__FILE__, 'sl_plugin_activate');
 
