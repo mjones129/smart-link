@@ -36,9 +36,10 @@ function sl_column_button_action(){
                 type: 'GET',
                 error: () => {alert("That didn't work. Please ensure this page is public and published before attempting to copy the secured link."); },
                 success: (response) => {
-                    console.log(`random token: ${generateToken()}`)
+                    let storedToken = generateToken();
+                    console.log(`random token: ${storedToken}`)
                     console.log(`response slug: ${response.slug}`)
-                    console.log(`full private link: ${window.location.origin}/${response.slug}?access_token=${generateToken()}`)
+                    console.log(`full private link: ${window.location.origin}/${response.slug}?access_token=${storedToken}`)
                 }
             });
         
