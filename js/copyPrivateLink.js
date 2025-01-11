@@ -27,9 +27,34 @@ function saveToken() {
 async function copyPrivateLink(link) {
     try {
         await navigator.clipboard.writeText(link);
-        console.log('Link copied to clipboard!');
+        Toastify({
+            text: "Link copied successfully",
+            duration: 5000,
+            newWindow: true,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+            onClick: function(){} // Callback after click
+          }).showToast();
     } catch (error) {
-        console.error('Failed to copy link: ', error);
+        Toastify({
+            text: "Failed to copy link: " + error,
+            duration: 5000,
+            destination: "https://github.com/apvarun/toastify-js",
+            newWindow: true,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right,rgb(176, 0, 0),rgb(221, 125, 15))",
+            },
+            onClick: function(){} // Callback after click
+          }).showToast();
     }
 }
 

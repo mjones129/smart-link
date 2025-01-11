@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.8
+ * Version: 0.4.15
  * Author: Matt Jones
  */
 
@@ -253,13 +253,15 @@ function sl_smtp_styles()
     wp_register_style('bootstrap5', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
     wp_enqueue_style('pl_style');
     wp_enqueue_style('bootstrap5');
-    wp_enqueue_script(
-        'my-custom-component',
-        plugins_url('/js/sidebar.js', __FILE__),
-        ['wp-blocks', 'wp-i18n', 'wp-element'],
-        false,
-        1
-    );
+    // wp_enqueue_script(
+    //     'my-custom-component',
+    //     plugins_url('/js/sidebar.js', __FILE__),
+    //     ['wp-blocks', 'wp-i18n', 'wp-element'],
+    //     false,
+    //     1
+    // );
+    wp_enqueue_style('sl_toastify_css', 'https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css', array(), '1.0.0');
+    wp_enqueue_script('sl_toastify_js', 'https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js', array(), '1.0.0', true);
     wp_enqueue_script('pl_first_time_check', plugin_dir_url(__FILE__) . '/js/first-time-check.js', array('jquery'), null, true);
     wp_enqueue_script('pl_edit_page_button', plugin_dir_url(__FILE__) . '/js/editPageButton.js', array(), null, true);
     wp_localize_script('pl_first_time_check', 'pl_ajax_object', array(
@@ -271,7 +273,7 @@ function sl_smtp_styles()
         'copy-private-link',
         plugin_dir_url(__FILE__) . '/js/copyPrivateLink.js',
         array('jquery'),
-        '1.0.0',
+        '1.0.1',
         null,
         true
     );
