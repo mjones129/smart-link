@@ -59,23 +59,22 @@ async function copyPrivateLink(link) {
 }
 
 function sl_column_button_action(){
+    // this regex will match any element with an id that starts with "sl-copy-link-" and ends with a number
         jQuery('a[id^="sl-copy-link-"]').filter(function() {
             return this.id.match(/^sl-copy-link-\d+$/);
         }).on("click", function(e){
             let post_id = jQuery(e.target).attr("data-id");
             let nonce = jQuery(e.target).attr("data-nonce");
-
+            // this ajax call will convert the post id from the data attribute and return the matching private link for that post id
             jQuery.ajax({
                 url: `https://mattjones.tech/wp-json/wp/v2/pages/${post_id}/`,
                 type: 'GET',
-                error: () => {alert("That didn't work. Please ensure this page is public and published before attempting to copy the secured link."); },
+                error: () => {alert("That didn't work. Please ensure this page is public and published before attempting to copy the secured link."); }, //TODO: make this a Toastify error
                 success: (response) => {
                     let storedToken = generateToken();
-                    // console.log(`random token: ${storedToken}`)
-                    // console.log(`response slug: ${response.slug}`)
-                    // console.log(`full private link: ${window.location.origin}/${response.slug}?access_token=${storedToken}`)
                     let privateLink = `${window.location.origin}/${response.slug}?access_token=${storedToken}`;
                     copyPrivateLink(privateLink);
+                    // this ajax call will save the token to the database for later use
                 }
             });
         
