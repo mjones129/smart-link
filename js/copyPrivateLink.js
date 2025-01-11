@@ -24,6 +24,15 @@ function saveToken() {
     //since you can't directly write to the database from JS, we'll need to use AJAX to send the token to the server
 }
 
+async function copyPrivateLink(link) {
+    try {
+        await navigator.clipboard.writeText(link);
+        console.log('Link copied to clipboard!');
+    } catch (error) {
+        console.error('Failed to copy link: ', error);
+    }
+}
+
 function sl_column_button_action(){
         jQuery('a[id^="sl-copy-link-"]').filter(function() {
             return this.id.match(/^sl-copy-link-\d+$/);
@@ -37,9 +46,11 @@ function sl_column_button_action(){
                 error: () => {alert("That didn't work. Please ensure this page is public and published before attempting to copy the secured link."); },
                 success: (response) => {
                     let storedToken = generateToken();
-                    console.log(`random token: ${storedToken}`)
-                    console.log(`response slug: ${response.slug}`)
-                    console.log(`full private link: ${window.location.origin}/${response.slug}?access_token=${storedToken}`)
+                    // console.log(`random token: ${storedToken}`)
+                    // console.log(`response slug: ${response.slug}`)
+                    // console.log(`full private link: ${window.location.origin}/${response.slug}?access_token=${storedToken}`)
+                    let privateLink = `${window.location.origin}/${response.slug}?access_token=${storedToken}`;
+                    copyPrivateLink(privateLink);
                 }
             });
         
