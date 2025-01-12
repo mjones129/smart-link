@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.15
+ * Version: 0.4.20
  * Author: Matt Jones
  */
 
@@ -40,6 +40,9 @@ require_once(plugin_dir_path(__FILE__) . '/pages/smtp-settings.php');
 //include the send private link page
 require_once(plugin_dir_path(__FILE__) . '/pages/send-private-link.php');
 
+//include the ajax handler file
+require_once(plugin_dir_path(__FILE__) . '/includes/sl_store_data.php');
+
 //plugin setup
 register_activation_hook(__FILE__, 'sl_plugin_activate');
 
@@ -62,18 +65,8 @@ function sl_plugin_uninstall()
     require_once plugin_dir_path(__FILE__) . 'uninstall.php';
 }
 
-//redirect if first time
-function sl_first_time_redirect()
-{
-    global $wpdb;
-    //check if creds table exists
-    if ($wpdb->prefix . 'sl_smtp_creds') {
-        $sl_smtp_creds = $wpdb->prefix . 'sl_smtp_creds';
+//redirect if first time?
 
-        $first_time = $wpdb->get_var("SELECT first_time FROM $sl_smtp_creds WHERE id = 1");
-    }
-}
-add_action('admin_init', 'sl_first_time_redirect');
 
 // Generate and store token
 //TODO: accept post ID instead, pull slug from ID
@@ -206,42 +199,8 @@ function sl_admin_menu()
 }
 add_action('admin_menu', 'sl_admin_menu');
 
-// Handle AJAX request to retrieve first_time value
-add_action('wp_ajax_get_first_time', 'sl_get_first_time');
+// Handle AJAX request to update first_time value?
 
-function sl_get_first_time()
-{
-    global $wpdb;
-    $sl_smtp_creds = $wpdb->prefix . 'sl_smtp_creds';
-    $first_time = $wpdb->get_var("SELECT first_time FROM $sl_smtp_creds WHERE id = 1");
-
-    wp_send_json_success(array('first_time' => $first_time));
-}
-
-// Handle AJAX request to update first_time value
-add_action('wp_ajax_update_first_time', 'sl_update_first_time');
-
-function sl_update_first_time()
-{
-    check_ajax_referer('pl_ajax_nonce', 'nonce');
-
-    global $wpdb;
-    $sl_smtp_creds = $wpdb->prefix . 'sl_tokens';
-    $result = $wpdb->update($sl_smtp_creds, ['first_time' => 0], ['id' => 1]);
-
-    if ($result !== false) {
-        wp_send_json_success();
-    } else {
-        wp_send_json_error('Failed to update first_time');
-    }
-}
-
-//because 'jsID' won't be defined unless the user clicks the copy link button, this will always generate a warning.
-// if (isset($_POST['jsID'])) {
-//     $selected_ID = $_POST['jsID'];
-// } else {
-//     $selected_ID = "";
-// }
 
 
 //enqueue stylesheet on smtp settings page
@@ -275,10 +234,10 @@ function sl_smtp_styles()
         null,
         true
     );
-    //convert post ID to URL
-    // $tokenized_link = sl_generate_user_token($selected_ID);
+    wp_localize_script('copy-private-link', 'sl_ajax_object', array(
+      'ajax_url' => admin_url('admin-ajax.php'),
+    ));
 
-    // wp_localize_script('copy-private-link', 'tokenizedLink', $tokenized_link);
 
 }
 add_action('admin_enqueue_scripts', 'sl_smtp_styles');
