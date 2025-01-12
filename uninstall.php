@@ -8,15 +8,12 @@ global $wpdb;
 
 // Grab tables to be dropped
 $tokens = $wpdb->prefix . 'sl_tokens';
-$creds = $wpdb->prefix . 'sl_smtp_creds';
 
 // Query to drop tables
 $sql1 = "DROP TABLE IF EXISTS $tokens";
-$sql2 = "DROP TABLE IF EXISTS $creds";
 
 // Execute queries
 $wpdb->query($sql1);
-$wpdb->query($sql2);
 
 // Remove encryption key
 $keypath = ABSPATH . 'wp-config.php';
