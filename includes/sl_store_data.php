@@ -5,7 +5,7 @@ add_action( 'wp_ajax_nopriv_store_sl_save_token', 'sl_save_token' );
 
 function sl_save_token() {
 
-    if( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sl_save_token' . $_POST['page_id'] ) ) {
+    if( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sl_save_token' ) ) {
         wp_send_json_error( 'Invalid nonce' );
         return;
     }
