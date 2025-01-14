@@ -35,7 +35,7 @@ add_action('admin_bar_menu', 'custom_toolbar_link', 999);
 
 
 //include the smtp settings page
-require_once(plugin_dir_path(__FILE__) . '/pages/smtp-settings.php');
+// require_once(plugin_dir_path(__FILE__) . '/pages/smtp-settings.php');
 
 //include the send private link page
 require_once(plugin_dir_path(__FILE__) . '/pages/send-private-link.php');
@@ -66,47 +66,6 @@ function sl_plugin_uninstall()
 }
 
 //redirect if first time?
-
-
-// Generate and store token
-//TODO: accept post ID instead, pull slug from ID
-
-function sl_generate_user_token($page_ID)
-{
-    global $wpdb;
-    // $post = get_post($page_ID);
-    global $post;
-    $page_slug = $post->post_name;
-    $token = bin2hex(random_bytes(16));
-    $expiration = date('Y-m-d H:i:s', strtotime('+1 day')); // Token valid for 1 day
-
-    $wpdb->insert(
-        $wpdb->prefix . 'sl_tokens',
-        array(
-        'page_ID' => $page_ID,
-        'slug' => $page_slug,
-        'token' => $token,
-        'expiration' => $expiration,
-        'used' => 0
-    ),
-        //specify data types
-        array(
-          '%s', //string
-          '%s', //string
-          '%s', //string
-          '%d' //integer
-        )
-    );
-    echo 'page slug: ' . $page_slug;
-    $tokenized_link = esc_url(home_url($page_slug . '?access_token=' . $token));
-    return $tokenized_link;
-}
-
-
-
-//full private link
-//$private_link = home_url($page_slug . '?access_token=' . $token);
-
 
 
 // Check user token for page access
@@ -165,7 +124,7 @@ function sl_check_access_token()
         error_log("Not a page.");
     }
 }
-add_action('template_redirect', 'sl_check_access_token');
+add_action('template_redirect', 'sl_check_access_token'); //TODO: check if this is the right hook
 
 //add admin menu item
 function sl_admin_menu()
