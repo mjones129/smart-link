@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.20
+ * Version: 0.4.22
  * Author: Matt Jones
  */
 
@@ -219,13 +219,13 @@ function sl_smtp_styles()
     // );
     wp_enqueue_style('sl_toastify_css', 'https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css', array(), '1.0.0');
     wp_enqueue_script('sl_toastify_js', 'https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js', array(), '1.0.0', true);
-    wp_enqueue_script('pl_first_time_check', plugin_dir_url(__FILE__) . '/js/first-time-check.js', array('jquery'), null, true);
+    // wp_enqueue_script('pl_first_time_check', plugin_dir_url(__FILE__) . '/js/first-time-check.js', array('jquery'), null, true);
     wp_enqueue_script('pl_edit_page_button', plugin_dir_url(__FILE__) . '/js/editPageButton.js', array(), null, true);
-    wp_localize_script('pl_first_time_check', 'pl_ajax_object', array(
-      'ajax_url' => admin_url('admin-ajax.php'),
-      'nonce' => wp_create_nonce('pl_ajax_nonce'),
-      'redirect_url' => admin_url('admin.php?page=smtp-settings')
-    ));
+    // wp_localize_script('pl_first_time_check', 'pl_ajax_object', array(
+    //   'ajax_url' => admin_url('admin-ajax.php'),
+    //   'nonce' => wp_create_nonce('pl_ajax_nonce'),
+    //   'redirect_url' => admin_url('admin.php?page=smtp-settings')
+    // ));
     wp_enqueue_script(
         'copy-private-link',
         plugin_dir_url(__FILE__) . '/js/copyPrivateLink.js',
