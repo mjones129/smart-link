@@ -68,7 +68,7 @@ function sl_column_button_action(){
             let currentTime = new Date().toISOString();
             // this ajax call will convert the post id from the data attribute and return the matching private link for that post id
             jQuery.ajax({
-                url: `https://mattjones.tech/wp-json/wp/v2/pages/${page_id}/`,
+                url: `/wp-json/wp/v2/pages/${page_id}/`,
                 type: 'GET',
                 error: () => {alert("That didn't work. Please ensure this page is public and published before attempting to copy the secured link."); }, //TODO: make this a Toastify error
                 success: (response) => {
