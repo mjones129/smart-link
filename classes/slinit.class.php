@@ -21,7 +21,6 @@ class SLinit
         token VARCHAR(32) NOT NULL,
         expiration DATETIME NOT NULL,
         used TINYINT DEFAULT 0,
-        first_time TINYINT DEFAULT 1,
         PRIMARY KEY (id),
         UNIQUE (token)
       ) $charset_collate;";
