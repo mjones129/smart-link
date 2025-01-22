@@ -5,7 +5,7 @@ add_action( 'wp_ajax_sl_save_token', 'sl_save_token' );
 function sl_save_token() {
     global $wpdb;
 
-    if( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sl_save_token' ) ) {
+    if( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sl-copy-link_' . $_POST['page_id'] ) ) {
         wp_send_json_error( 'Invalid nonce' );
         return;
     }
