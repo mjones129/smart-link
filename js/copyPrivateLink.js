@@ -87,8 +87,9 @@ function sl_column_button_action(){
                             current_time: currentTime
                         },
                         success: (response) => {
+                            console.log(response);
                             Toastify({
-                                text: "Link stored successfully",
+                                text: `ajax response: ${response.data}`,
                                 duration: 5000,
                                 newWindow: true,
                                 close: true,
@@ -103,7 +104,7 @@ function sl_column_button_action(){
                         },
                         error: function(error) {
                             Toastify({
-                                text: "Failed to store link: " + error,
+                                text: "Failed to store link: " + error.data,
                                 duration: 5000,
                                 destination: "",
                             }).showToast();
