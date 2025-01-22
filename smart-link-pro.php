@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.22
+ * Version: 0.4.23
  * Author: Matt Jones
  */
 
@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
     exit; //Exit if accessed directly
 }
 
-// Register sidebar button
+// Register copy private link button
 function sl_load_column() {
     require_once plugin_dir_path(__FILE__) . '/classes/sl_columns.php';
     $columns = new SLColumns();
