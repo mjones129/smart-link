@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.25
+ * Version: 0.4.28
  * Author: Smart Link Pro
  * Author URI: https://smartlinkpro.io
  */
@@ -128,30 +128,21 @@ add_action('template_redirect', 'sl_check_access_token'); //TODO: check if this 
 function sl_admin_menu()
 {
     add_menu_page(
-        'Private Links', //page title
-        'Private Links', //menu title
+        'Smart Link Pro', //page title
+        'Smart Link Pro', //menu title
         'manage_options', //capability
-        'send-email', //menu slug
+        'slp-dashboard', //menu slug
         'pl_admin_page', //function to render the page
         'dashicons-admin-network' //icon (optional)
     );
     add_submenu_page(
-        'send-email', //parent slug
-        'Email Link', //page title
-        'Email Link', //menu title
+        'slp-dashboard', //parent slug
+        'Link Dashboard', //page title
+        'Link Dashboard', //menu title
         'manage_options', //capability
-        'send-email', //menu slug
+        'slp-dashboard', //menu slug
         'pl_admin_page', //function to render the page
         1 //menu position
-    );
-    add_submenu_page(
-        'send-email', //parent slug
-        'SMTP Settings', //page title
-        'SMTP Settings', //menu title
-        'manage_options', // capability
-        'smtp-settings', //menu slug
-        'pl_render_smtp_settings_page', //function to render the page
-        2 //menu position
     );
 }
 add_action('admin_menu', 'sl_admin_menu');
