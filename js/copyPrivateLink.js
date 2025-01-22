@@ -70,9 +70,10 @@ function sl_column_button_action(){
             jQuery.ajax({
                 url: `/wp-json/wp/v2/pages/${page_id}/`,
                 type: 'GET',
-                error: () => {alert("That didn't work. Please ensure this page is public and published before attempting to copy the secured link."); }, //TODO: make this a Toastify error
+                error: (response) => {alert(`error: ${response.data}`); }, //TODO: make this a Toastify error
                 success: (response) => {
                     let storedToken = generateToken();
+                    let slug = response.slug;
                     let privateLink = `${window.location.origin}/${response.slug}?access_token=${storedToken}`;
                     copyPrivateLink(privateLink);
                     // this ajax call will save the token to the database for later use
@@ -83,6 +84,7 @@ function sl_column_button_action(){
                             action: 'sl_save_token',
                             nonce: nonce,
                             token: storedToken,
+                            slug: slug,
                             page_id: page_id,
                             current_time: currentTime
                         },
