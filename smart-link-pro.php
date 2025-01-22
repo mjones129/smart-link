@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.15
+ * Version: 0.4.23
  * Author: Matt Jones
  */
 
@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
     exit; //Exit if accessed directly
 }
 
-// Register sidebar button
+// Register copy private link button
 function sl_load_column() {
     require_once plugin_dir_path(__FILE__) . '/classes/sl_columns.php';
     $columns = new SLColumns();
@@ -35,10 +35,13 @@ add_action('admin_bar_menu', 'custom_toolbar_link', 999);
 
 
 //include the smtp settings page
-require_once(plugin_dir_path(__FILE__) . '/pages/smtp-settings.php');
+// require_once(plugin_dir_path(__FILE__) . '/pages/smtp-settings.php');
 
 //include the send private link page
 require_once(plugin_dir_path(__FILE__) . '/pages/send-private-link.php');
+
+//include the ajax handler file
+require_once(plugin_dir_path(__FILE__) . '/includes/sl_store_data.php');
 
 //plugin setup
 register_activation_hook(__FILE__, 'sl_plugin_activate');
@@ -62,58 +65,7 @@ function sl_plugin_uninstall()
     require_once plugin_dir_path(__FILE__) . 'uninstall.php';
 }
 
-//redirect if first time
-function sl_first_time_redirect()
-{
-    global $wpdb;
-    //check if creds table exists
-    if ($wpdb->prefix . 'sl_smtp_creds') {
-        $sl_smtp_creds = $wpdb->prefix . 'sl_smtp_creds';
-
-        $first_time = $wpdb->get_var("SELECT first_time FROM $sl_smtp_creds WHERE id = 1");
-    }
-}
-add_action('admin_init', 'sl_first_time_redirect');
-
-// Generate and store token
-//TODO: accept post ID instead, pull slug from ID
-
-function sl_generate_user_token($page_ID)
-{
-    global $wpdb;
-    // $post = get_post($page_ID);
-    global $post;
-    $page_slug = $post->post_name;
-    $token = bin2hex(random_bytes(16));
-    $expiration = date('Y-m-d H:i:s', strtotime('+1 day')); // Token valid for 1 day
-
-    $wpdb->insert(
-        $wpdb->prefix . 'sl_tokens',
-        array(
-        'page_ID' => $page_ID,
-        'slug' => $page_slug,
-        'token' => $token,
-        'expiration' => $expiration,
-        'used' => 0
-    ),
-        //specify data types
-        array(
-          '%s', //string
-          '%s', //string
-          '%s', //string
-          '%d' //integer
-        )
-    );
-    echo 'page slug: ' . $page_slug;
-    $tokenized_link = esc_url(home_url($page_slug . '?access_token=' . $token));
-    return $tokenized_link;
-}
-
-
-
-//full private link
-//$private_link = home_url($page_slug . '?access_token=' . $token);
-
+//redirect if first time?
 
 
 // Check user token for page access
@@ -172,7 +124,7 @@ function sl_check_access_token()
         error_log("Not a page.");
     }
 }
-add_action('template_redirect', 'sl_check_access_token');
+add_action('template_redirect', 'sl_check_access_token'); //TODO: check if this is the right hook
 
 //add admin menu item
 function sl_admin_menu()
@@ -206,42 +158,8 @@ function sl_admin_menu()
 }
 add_action('admin_menu', 'sl_admin_menu');
 
-// Handle AJAX request to retrieve first_time value
-add_action('wp_ajax_get_first_time', 'sl_get_first_time');
+// Handle AJAX request to update first_time value?
 
-function sl_get_first_time()
-{
-    global $wpdb;
-    $sl_smtp_creds = $wpdb->prefix . 'sl_smtp_creds';
-    $first_time = $wpdb->get_var("SELECT first_time FROM $sl_smtp_creds WHERE id = 1");
-
-    wp_send_json_success(array('first_time' => $first_time));
-}
-
-// Handle AJAX request to update first_time value
-add_action('wp_ajax_update_first_time', 'sl_update_first_time');
-
-function sl_update_first_time()
-{
-    check_ajax_referer('pl_ajax_nonce', 'nonce');
-
-    global $wpdb;
-    $sl_smtp_creds = $wpdb->prefix . 'sl_tokens';
-    $result = $wpdb->update($sl_smtp_creds, ['first_time' => 0], ['id' => 1]);
-
-    if ($result !== false) {
-        wp_send_json_success();
-    } else {
-        wp_send_json_error('Failed to update first_time');
-    }
-}
-
-//because 'jsID' won't be defined unless the user clicks the copy link button, this will always generate a warning.
-// if (isset($_POST['jsID'])) {
-//     $selected_ID = $_POST['jsID'];
-// } else {
-//     $selected_ID = "";
-// }
 
 
 //enqueue stylesheet on smtp settings page
@@ -260,13 +178,13 @@ function sl_smtp_styles()
     // );
     wp_enqueue_style('sl_toastify_css', 'https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css', array(), '1.0.0');
     wp_enqueue_script('sl_toastify_js', 'https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js', array(), '1.0.0', true);
-    wp_enqueue_script('pl_first_time_check', plugin_dir_url(__FILE__) . '/js/first-time-check.js', array('jquery'), null, true);
+    // wp_enqueue_script('pl_first_time_check', plugin_dir_url(__FILE__) . '/js/first-time-check.js', array('jquery'), null, true);
     wp_enqueue_script('pl_edit_page_button', plugin_dir_url(__FILE__) . '/js/editPageButton.js', array(), null, true);
-    wp_localize_script('pl_first_time_check', 'pl_ajax_object', array(
-      'ajax_url' => admin_url('admin-ajax.php'),
-      'nonce' => wp_create_nonce('pl_ajax_nonce'),
-      'redirect_url' => admin_url('admin.php?page=smtp-settings')
-    ));
+    // wp_localize_script('pl_first_time_check', 'pl_ajax_object', array(
+    //   'ajax_url' => admin_url('admin-ajax.php'),
+    //   'nonce' => wp_create_nonce('pl_ajax_nonce'),
+    //   'redirect_url' => admin_url('admin.php?page=smtp-settings')
+    // ));
     wp_enqueue_script(
         'copy-private-link',
         plugin_dir_url(__FILE__) . '/js/copyPrivateLink.js',
@@ -275,10 +193,10 @@ function sl_smtp_styles()
         null,
         true
     );
-    //convert post ID to URL
-    // $tokenized_link = sl_generate_user_token($selected_ID);
+    wp_localize_script('copy-private-link', 'sl_ajax_object', array(
+      'ajax_url' => admin_url('admin-ajax.php'),
+    ));
 
-    // wp_localize_script('copy-private-link', 'tokenizedLink', $tokenized_link);
 
 }
 add_action('admin_enqueue_scripts', 'sl_smtp_styles');

@@ -59,35 +59,61 @@ async function copyPrivateLink(link) {
 }
 
 function sl_column_button_action(){
+    // this regex will match any element with an id that starts with "sl-copy-link-" and ends with a number
         jQuery('a[id^="sl-copy-link-"]').filter(function() {
             return this.id.match(/^sl-copy-link-\d+$/);
         }).on("click", function(e){
-            let post_id = jQuery(e.target).attr("data-id");
+            let page_id = jQuery(e.target).attr("data-id");
             let nonce = jQuery(e.target).attr("data-nonce");
-
+            let currentTime = new Date().toISOString();
+            // this ajax call will convert the post id from the data attribute and return the matching private link for that post id
             jQuery.ajax({
-                url: `https://mattjones.tech/wp-json/wp/v2/pages/${post_id}/`,
+                url: `/wp-json/wp/v2/pages/${page_id}/`,
                 type: 'GET',
-                error: () => {alert("That didn't work. Please ensure this page is public and published before attempting to copy the secured link."); },
+                error: () => {alert("That didn't work. Please ensure this page is public and published before attempting to copy the secured link."); }, //TODO: make this a Toastify error
                 success: (response) => {
                     let storedToken = generateToken();
-                    // console.log(`random token: ${storedToken}`)
-                    // console.log(`response slug: ${response.slug}`)
-                    // console.log(`full private link: ${window.location.origin}/${response.slug}?access_token=${storedToken}`)
                     let privateLink = `${window.location.origin}/${response.slug}?access_token=${storedToken}`;
                     copyPrivateLink(privateLink);
-                }
+                    // this ajax call will save the token to the database for later use
+                    jQuery.ajax({
+                        url: sl_ajax_object.ajax_url,
+                        type: 'POST',
+                        data: {
+                            action: 'sl_save_token',
+                            nonce: nonce,
+                            token: storedToken,
+                            page_id: page_id,
+                            current_time: currentTime
+                        },
+                        success: (response) => {
+                            console.log(response);
+                            Toastify({
+                                text: `ajax response: ${response.data}`,
+                                duration: 5000,
+                                newWindow: true,
+                                close: true,
+                                gravity: "bottom", // `top` or `bottom`
+                                position: "right", // `left`, `center` or `right`
+                                stopOnFocus: true, // Prevents dismissing of toast on hover
+                                style: {
+                                  background: "linear-gradient(to right, #00b09b, #96c93d)",
+                                },
+                                onClick: function(){} // Callback after click
+                              }).showToast();
+                        },
+                        error: function(error) {
+                            Toastify({
+                                text: "Failed to store link: " + error.data,
+                                duration: 5000,
+                                destination: "",
+                            }).showToast();
+                        }
+                    })
+                },
             });
         
         });
 }
 
-// button.addEventListener("click", () => writeClipboardText("<empty clipboard>"));
 
-// async function writeClipboardText(text) {
-//   try {
-//     await navigator.clipboard.writeText(text);
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// }
