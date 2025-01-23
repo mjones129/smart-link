@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.35
+ * Version: 0.4.36
  * Author: Smart Link Pro
  * Author URI: https://smartlinkpro.io
  */
@@ -186,7 +186,6 @@ function sl_smtp_styles()
     wp_localize_script('copy-private-link', 'sl_ajax_object', array(
       'ajax_url' => admin_url('admin-ajax.php'),
     ));
-
 
 }
 add_action('admin_enqueue_scripts', 'sl_smtp_styles');
