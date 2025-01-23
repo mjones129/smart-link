@@ -10,7 +10,7 @@ class SLColumns
 
     public function sl_add_link_button($actions, $post)
     {
-        $actions['sl_copy_link'] = '<a data-id="' . $post->ID . '" data-nonce="' . wp_create_nonce('sl-copy-link_' . $post->ID) . '" id="sl-copy-link-' . $post->ID . '" style="cursor:pointer; color: #0d6efd;">' . __('Copy Private Link') . '</a>';
+        $actions['sl_copy_link'] = '<a data-id="' . $post->ID . '" data-nonce="' . wp_create_nonce('sl-copy-link_' . $post->ID) . '" id="sl-copy-link-' . $post->ID . '" style="cursor:pointer; color: #0d6efd;">' . __('Copy Smart Link') . '</a>';
         return $actions;
     }
 }
