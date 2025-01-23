@@ -1,4 +1,53 @@
 <?php
+
+function time_ago_or_expired($datetime, $full = false) {
+  $now = new DateTime;
+  $then = new DateTime($datetime);
+  if ($now > $then) {
+      return 'expired';
+  }
+
+  $diff = $now->diff($then);
+  $days = $diff->days;
+  $weeks = floor($days / 7);
+  $days -= $weeks * 7;
+
+  $string = array(
+      'y' => 'year',
+      'm' => 'month',
+      'w' => 'week',
+      'd' => 'day',
+      'h' => 'hour',
+      'i' => 'minute',
+      's' => 'second',
+  );
+  $diffValues = array(
+      'y' => $diff->y,
+      'm' => $diff->m,
+      'w' => $weeks,
+      'd' => $days,
+      'h' => $diff->h,
+      'i' => $diff->i,
+      's' => $diff->s,
+  );
+
+  foreach ($string as $k => &$v) {
+      if ($diffValues[$k]) {
+          $v = $diffValues[$k] . ' ' . $v . ($diffValues[$k] > 1 ? 's' : '');
+      } else {
+          unset($string[$k]);
+      }
+  }
+
+  if (!$full) $string = array_slice($string, 0, 1);
+  return $string ? implode(', ', $string) . ' from now' : 'just now';
+}
+
+
+
+
+
+
 function slp_admin_page()
 {
 ?>
@@ -62,7 +111,7 @@ function slp_admin_page()
                 echo "<td>" . $token->page_ID . "</td>";
                 echo "<td>" . $token->slug . "</td>";
                 echo "<td>" . $token->token . "</td>";
-                echo "<td>" . $token->expiration . "</td>";
+                echo "<td>" . time_ago_or_expired($token->expiration) . "</td>";
                 echo "<td>" . $smart_link . "</td>";
                 echo "<td>" . ($token->used ? 'Yes' : 'No') . "</td>";
                 echo "</tr>";
