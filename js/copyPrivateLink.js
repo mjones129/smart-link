@@ -89,7 +89,6 @@ function sl_column_button_action(){
                             current_time: currentTime
                         },
                         success: (response) => {
-                            console.log(response);
                             Toastify({
                                 text: `ajax response: ${response.data}`,
                                 duration: 5000,
