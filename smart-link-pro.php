@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link Pro
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.28
+ * Version: 0.4.31
  * Author: Smart Link Pro
  * Author URI: https://smartlinkpro.io
  */
@@ -38,8 +38,8 @@ add_action('admin_bar_menu', 'custom_toolbar_link', 999);
 //include the smtp settings page
 // require_once(plugin_dir_path(__FILE__) . '/pages/smtp-settings.php');
 
-//include the send private link page
-require_once(plugin_dir_path(__FILE__) . '/pages/send-private-link.php');
+//include the main dashboard page
+require_once(plugin_dir_path(__FILE__) . '/pages/slp_dashboard.php');
 
 //include the ajax handler file
 require_once(plugin_dir_path(__FILE__) . '/includes/sl_store_data.php');
@@ -127,13 +127,14 @@ add_action('template_redirect', 'sl_check_access_token'); //TODO: check if this 
 //add admin menu item
 function sl_admin_menu()
 {
+    $icon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTM0LjY0NDM1IgogICBoZWlnaHQ9IjY4OS4yMjg4MiIKICAgdmlld0JveD0iMCAwIDE0MS40NTc5OCAxODIuMzU4NDYiCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzEiCiAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnMKICAgICBpZD0iZGVmczEiIC8+PGcKICAgICBpZD0ibGF5ZXIxIgogICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKC03OS4xNDE0MjYsLTI0LjYwODk0OCkiPjxwYXRoCiAgICAgICBpZD0icGF0aDItMi01LTctNCIKICAgICAgIHN0eWxlPSJmaWxsOiM3ZDdkN2Q7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjAuOTM2MzU3O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2Utb3BhY2l0eToxIgogICAgICAgZD0ibSA3OS4xNDE0MTksMTg2LjUxNzE2IGMgNDMuNTYzMDAxLC00My41NjMgNzkuNDgxMTMxLC03OS40ODExNSA5OC43NDI1MTEsLTk4Ljc0MjUwMSAyNy4yNjY5OSwyNy4yNjY5OTEgMjcuMjY2OTksNzEuNDc1NTExIDAsOTguNzQyNTAxIC0yNy4yNjcwMSwyNy4yNjY5OSAtNzEuNDc1NTIsMjcuMjY2OTkgLTk4Ljc0MjUxMSwwIHoiIC8+PHBhdGgKICAgICAgIGlkPSJwYXRoMi03LTgtMCIKICAgICAgIHN0eWxlPSJmaWxsOiM1MjUyNTI7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjEwLjU0MTU7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJtIDIyMC41OTk0MSw0NS4wNTkxODkgYyAtNDMuNTYzLDQzLjU2MyAtNzkuNDgxMTIsNzkuNDgxMTMxIC05OC43NDI1MSw5OC43NDI0OTEgLTI3LjI2Njk5MSwtMjcuMjY2OTkgLTI3LjI2Njk5MSwtNzEuNDc1NDkxIDAsLTk4Ljc0MjQ5MSAyNy4yNjcsLTI3LjI2Njk5IDcxLjQ3NTUyLC0yNy4yNjY5OSA5OC43NDI1MSwwIHoiIC8+PC9nPjwvc3ZnPgo=';
     add_menu_page(
         'Smart Link Pro', //page title
         'Smart Link Pro', //menu title
         'manage_options', //capability
         'slp-dashboard', //menu slug
-        'pl_admin_page', //function to render the page
-        'dashicons-admin-network' //icon (optional)
+        'slp_admin_page', //function to render the page
+        $icon //icon (optional)
     );
     add_submenu_page(
         'slp-dashboard', //parent slug
@@ -141,7 +142,7 @@ function sl_admin_menu()
         'Link Dashboard', //menu title
         'manage_options', //capability
         'slp-dashboard', //menu slug
-        'pl_admin_page', //function to render the page
+        'slp_admin_page', //function to render the page
         1 //menu position
     );
 }
