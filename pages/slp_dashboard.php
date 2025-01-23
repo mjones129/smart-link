@@ -1,5 +1,5 @@
 <?php
-function pl_admin_page()
+function slp_admin_page()
 {
 ?>
 
@@ -23,9 +23,18 @@ function pl_admin_page()
 
 
   <div class="wrap pl-form">
-    <h1>Smart Link Dashboard</h1>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-4">
+          <img src="<?php echo plugins_url('../assets/smartlinklogo-512-alpha.png', __FILE__); ?>" alt="Logo" class="pl-logo">
+        </div>
+        <div class="col-8">
+          <h1>Smart Link Dashboard</h1>
+        </div>
+      </div>
+    </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <h2>Protected Links</h2>
         <table class="table table-striped">
           <thead>
@@ -43,11 +52,11 @@ function pl_admin_page()
             global $wpdb;
             //make a request to the database and get all rows from the sl_tokens table
             $tokens = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sl_tokens");
-            
+
             //only loop through if there are tokens
             if ($tokens) {
               foreach ($tokens as $token) {
-                $smart_link = site_url() . '/?access_token=' . $token->token;
+                $smart_link = site_url() . '/' . $token->slug . '/?access_token=' . $token->token;
                 echo "<tr>";
                 echo "<td>" . $token->page_ID . "</td>";
                 echo "<td>" . $token->slug . "</td>";
