@@ -26,7 +26,7 @@ function slp_admin_page()
     <div class="container">
       <div class="row align-items-center">
         <div class="col-4">
-          <img src="<?php echo plugins_url('../assets/smartlinklogo-512-alpha.png', __FILE__); ?>" alt="Logo" class="pl-logo">
+          <img src="<?php echo plugins_url('../images/smartlinklogo-512-alpha.png', __FILE__); ?>" alt="Logo" class="pl-logo">
         </div>
         <div class="col-8">
           <h1>Smart Link Dashboard</h1>
