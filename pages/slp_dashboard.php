@@ -56,7 +56,8 @@ function slp_admin_page()
             //only loop through if there are tokens
             if ($tokens) {
               foreach ($tokens as $token) {
-                $smart_link = site_url() . '/' . $token->slug . '/?access_token=' . $token->token;
+                $url = trailingslashit(get_site_url());
+                $smart_link = $url . $token->slug . '/?access_token=' . $token->token;
                 echo "<tr>";
                 echo "<td>" . $token->page_ID . "</td>";
                 echo "<td>" . $token->slug . "</td>";
