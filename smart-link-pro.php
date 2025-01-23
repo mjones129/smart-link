@@ -71,7 +71,7 @@ function sl_check_access_token()
 {
     global $wpdb;
 
-    error_log("sl_check_access_token function called");
+    // error_log("sl_check_access_token function called");
 
     // Select all the page slugs from the tokens table
     $protected_slugs = $wpdb->get_col("SELECT slug FROM " . $wpdb->prefix . "sl_tokens");
