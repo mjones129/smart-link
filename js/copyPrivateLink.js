@@ -13,6 +13,8 @@ if(window.attachEvent) {
     }
 }
 
+
+
 function generateToken() {
     const array = new Uint8Array(8);
     window.crypto.getRandomValues(array);
@@ -20,9 +22,73 @@ function generateToken() {
     return token;
 }
 
-function saveToken() {
-    //since you can't directly write to the database from JS, we'll need to use AJAX to send the token to the server
-}
+
+jQuery(function($) {
+    $('button[id^="sl-delete-link-"]').filter(function() {
+        return this.id.match(/^sl-delete-link-.+$/);
+    }).on("click", function(e) {
+        let nonce = $(this).attr("data-nonce");
+        let tokenID = $(this).attr("data-token-id");
+
+        $.ajax({
+            url: sl_ajax_object.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'sl_delete_token',
+                nonce: nonce,
+                token_id: tokenID
+            },
+            success: function(response) {
+                if (response.success) {
+                    Toastify({
+                        text: "Link deleted successfully",
+                        duration: 5000,
+                        newWindow: true,
+                        close: true,
+                        gravity: "bottom",
+                        position: "right",
+                        stopOnFocus: true,
+                        style: {
+                            background: "linear-gradient(to right, #00b09b, #96c93d)",
+                        },
+                        onClick: function(){} // Callback after click
+                    }).showToast();
+                    // Optionally, remove the row from the table
+                    $(e.target).closest('tr').remove();
+                } else {
+                    Toastify({
+                        text: "Failed to delete token: " + response.data,
+                        duration: 5000,
+                        newWindow: true,
+                        close: true,
+                        gravity: "bottom",
+                        position: "right",
+                        stopOnFocus: true,
+                        style: {
+                            background: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                        },
+                        onClick: function(){} // Callback after click
+                    }).showToast();
+                }
+            },
+            error: function(error) {
+                Toastify({
+                    text: "Failed to delete token: " + error.statusText,
+                    duration: 5000,
+                    newWindow: true,
+                    close: true,
+                    gravity: "bottom",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                    },
+                    onClick: function(){} // Callback after click
+                }).showToast();
+            }
+        });
+    });
+});
 
 async function copyPrivateLink(link) {
     try {
@@ -61,7 +127,7 @@ async function copyPrivateLink(link) {
 function sl_column_button_action(){
     // this regex will match any element with an id that starts with "sl-copy-link-" and ends with a number
         jQuery('a[id^="sl-copy-link-"]').filter(function() {
-            return this.id.match(/^sl-copy-link-\d+$/);
+            return this.id.match(/^sl-copy-link-.+$/);
         }).on("click", function(e){
             let page_id = jQuery(e.target).attr("data-id");
             let nonce = jQuery(e.target).attr("data-nonce");

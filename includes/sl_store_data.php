@@ -37,3 +37,30 @@ function sl_save_token() {
     wp_send_json_success( 'Data Stored!' );
 }
 
+add_action( 'wp_ajax_sl_delete_token', 'sl_delete_token' );
+
+function sl_delete_token() {
+    global $wpdb;
+
+    // if( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sl-delete-link_' . $_POST['token_id'] ) ) {
+    //     wp_send_json_error( 'Invalid nonce' );
+    //     return;
+    // }
+
+    $id = isset( $_POST['token_id'] ) ? sanitize_text_field( $_POST['token_id'] ) : '';
+
+    $tokens_table = $wpdb->prefix . 'sl_tokens';
+
+    $deleted = $wpdb->delete(
+        $tokens_table,
+        array(
+            'id' => $id,
+        )
+    );
+
+    if( ! $deleted ) {
+        wp_send_json_error( 'Error deleting data: ' . $wpdb->last_error );
+        return;
+    }
+    wp_send_json_success( 'Data Deleted!' );
+}

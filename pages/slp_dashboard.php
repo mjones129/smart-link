@@ -45,9 +45,6 @@ function time_ago_or_expired($datetime, $full = false) {
 
 
 
-
-
-
 function slp_admin_page()
 {
 ?>
@@ -90,10 +87,10 @@ function slp_admin_page()
             <tr>
               <th scope="col">Page ID</th>
               <th scope="col">Slug</th>
-              <th scope="col">Token</th>
               <th scope="col">Expiration</th>
               <th scope="col">Smart Link</th>
               <th scope="col">Used</th>
+              <th scope="col">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -107,14 +104,18 @@ function slp_admin_page()
               foreach ($tokens as $token) {
                 $url = trailingslashit(get_site_url());
                 $smart_link = $url . $token->slug . '/?access_token=' . $token->token;
+                $nonce = wp_create_nonce('sl-delete-link_' . $token->id);
+                $id = 'sl-delete-link-' . $nonce;
                 echo "<tr>";
                 echo "<td>" . $token->page_ID . "</td>";
                 echo "<td>" . $token->slug . "</td>";
-                echo "<td>" . $token->token . "</td>";
+                // echo "<td>" . $token->token . "</td>";
                 echo "<td>" . time_ago_or_expired($token->expiration) . "</td>";
                 echo "<td>" . $smart_link . "</td>";
                 echo "<td>" . ($token->used ? 'Yes' : 'No') . "</td>";
+                echo "<td><button data-nonce=\"" . $nonce . "\" class='btn btn-danger' data-token-id=" . $token->id . " id=" . $id . ">Delete</button></td>";
                 echo "</tr>";
+
               }
             }
             ?>
