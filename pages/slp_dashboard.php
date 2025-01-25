@@ -91,7 +91,6 @@ function slp_admin_page()
                 echo "<tr>";
                 echo "<td>" . $token->page_ID . "</td>";
                 echo "<td>" . $token->slug . "</td>";
-                // echo "<td>" . $token->token . "</td>";
                 echo "<td>" . time_ago_or_expired($token->expiration) . "</td>";
                 echo "<td>" . $smart_link . "</td>";
                 echo "<td>" . ($token->used ? 'Yes' : 'No') . "</td>";
