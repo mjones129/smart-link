@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.42
+ * Version: 0.4.43
  * Author: Smart Link Pro
  * Author URI: https://smartlinkpro.io
  */
@@ -46,7 +46,8 @@ register_activation_hook(__FILE__, 'sl_plugin_activate');
 
 function sl_plugin_activate()
 {
-    require_once plugin_dir_path(__FILE__) . 'activate.php';
+    // require_once plugin_dir_path(__FILE__) . 'activate.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/sl_activate.php';
     sl_activate_plugin();
     flush_rewrite_rules();
 }
@@ -160,8 +161,8 @@ add_action('admin_menu', 'sl_admin_menu');
 
 
 
-//enqueue stylesheet on smtp settings page
-function sl_smtp_styles()
+//enqueue stylesheet on admin settings page
+function sl_admin_styles()
 {
     wp_enqueue_style('pl_style', plugin_dir_url(__FILE__) . 'css/pl-style.css', array(), '1.1', 'all');
     wp_enqueue_style('bootstrap5', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
@@ -174,5 +175,5 @@ function sl_smtp_styles()
     ));
 
 }
-add_action('admin_enqueue_scripts', 'sl_smtp_styles');
+add_action('admin_enqueue_scripts', 'sl_admin_styles');
 
