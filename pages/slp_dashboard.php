@@ -49,25 +49,6 @@ function slp_admin_page()
 {
 ?>
 
-  <!-- Modal -->
-  <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Smart Link Pro Setup</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Thanks for installing Smart Link Pro! Enter your SMTP credentials to get started.
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Awesome</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
   <div class="wrap pl-form">
     <div class="container">
       <div class="row align-items-center">
