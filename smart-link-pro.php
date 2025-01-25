@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.41
+ * Version: 0.4.42
  * Author: Smart Link Pro
  * Author URI: https://smartlinkpro.io
  */
@@ -56,8 +56,23 @@ register_uninstall_hook(__FILE__, 'sl_plugin_uninstall');
 
 function sl_plugin_uninstall()
 {
-    // Path to the uninstall script
-    require_once plugin_dir_path(__FILE__) . '/includes/uninstall.php';
+    
+    global $wpdb;
+    
+    // Grab tables to be dropped
+    $tokens = $wpdb->prefix . 'sl_tokens';
+    
+    // Query to drop tables
+    $sql1 = "DROP TABLE IF EXISTS $tokens";
+    
+    // Execute queries
+    $result = $wpdb->query($sql1);
+    
+    if($result === false) {
+        error_log('Failed to drop table: ' . $tokens);
+    } else {
+        error_log('Successfully dropped table: ' . $tokens);
+    }
 }
 
 
@@ -148,13 +163,10 @@ add_action('admin_menu', 'sl_admin_menu');
 //enqueue stylesheet on smtp settings page
 function sl_smtp_styles()
 {
-    wp_register_style('pl_style', plugin_dir_url(__FILE__) . 'css/pl-style.css', array(), '1.1', 'all');
-    wp_register_style('bootstrap5', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
-    wp_enqueue_style('pl_style');
-    wp_enqueue_style('bootstrap5');
+    wp_enqueue_style('pl_style', plugin_dir_url(__FILE__) . 'css/pl-style.css', array(), '1.1', 'all');
+    wp_enqueue_style('bootstrap5', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
     wp_enqueue_style('sl_toastify_css', 'https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css', array(), '1.0.0');
     wp_enqueue_script('sl_toastify_js', 'https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js', array(), '1.0.0', true);
-    wp_enqueue_script('pl_edit_page_button', plugin_dir_url(__FILE__) . '/js/editPageButton.js', array(), null, true);
     wp_enqueue_script('copy-private-link', plugin_dir_url(__FILE__) . 'js/copyPrivateLink.js', array('jquery'), '1.0.7', null, true);
 
     wp_localize_script('copy-private-link', 'sl_ajax_object', array(
