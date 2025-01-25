@@ -57,7 +57,7 @@ register_uninstall_hook(__FILE__, 'sl_plugin_uninstall');
 function sl_plugin_uninstall()
 {
     // Path to the uninstall script
-    require_once plugin_dir_path(__FILE__) . 'uninstall.php';
+    require_once plugin_dir_path(__FILE__) . '/includes/uninstall.php';
 }
 
 
