@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.4.43
+ * Version: 0.4.44
  * Author: Smart Link Pro
  * Author URI: https://smartlinkpro.io
  */
