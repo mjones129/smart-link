@@ -2,6 +2,7 @@
 
 function sl_activate_plugin()
 {
+    //create database table
     require_once(ABSPATH . '/wp-admin/includes/upgrade.php');
 
     global $wpdb;
@@ -24,6 +25,16 @@ function sl_activate_plugin()
 
       dbDelta($sql);
     }
+
+    //create access denied page
+    $access_denied_page = array(
+        'post_title' => 'Access Denied',
+        'post_content' => 'This is a protected page. You do not have access to view this content.',
+        'post_status' => 'publish',
+        'post_type' => 'page',
+        'post_name' => 'access-denied'
+    );
+    wp_insert_post($access_denied_page);
 
 }
 
