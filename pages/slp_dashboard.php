@@ -48,13 +48,14 @@ function time_ago_or_expired($datetime, $full = false) {
 
 function slp_admin_page()
 {
+  $image_url = plugins_url('../images/smartlinklogo-512-alpha.png', __FILE__);
 ?>
 
   <div class="wrap pl-form">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-4">
-          <img src="<?php echo plugins_url('../images/smartlinklogo-512-alpha.png', __FILE__); ?>" alt="Logo" class="pl-logo">
+          <img src="<?php echo esc_url( $image_url ) ?>" alt="Logo" class="pl-logo">
         </div>
         <div class="col-8">
           <h1>Smart Link Dashboard</h1>
@@ -84,17 +85,19 @@ function slp_admin_page()
             //only loop through if there are tokens
             if ($tokens) {
               foreach ($tokens as $token) {
+                $pageid = $token->page_ID;
+                $slug = $token->slug;
                 $url = trailingslashit(get_site_url());
                 $smart_link = $url . $token->slug . '/?access_token=' . $token->token;
                 $nonce = wp_create_nonce('sl-delete-link_' . $token->id);
                 $id = 'sl-delete-link-' . $nonce;
                 echo "<tr>";
-                echo "<td>" . $token->page_ID . "</td>";
-                echo "<td>" . $token->slug . "</td>";
-                echo "<td>" . time_ago_or_expired($token->expiration) . "</td>";
-                echo "<td>" . $smart_link . "</td>";
+                echo "<td>" . esc_html($pageid) . "</td>";
+                echo "<td>" . esc_html($slug) . "</td>";
+                echo "<td>" . esc_html(time_ago_or_expired($token->expiration)) . "</td>";
+                echo "<td>" . esc_url($smart_link) . "</td>";
                 echo "<td>" . ($token->used ? 'Yes' : 'No') . "</td>";
-                echo "<td><button data-nonce=\"" . $nonce . "\" class='btn btn-danger' data-token-id=" . $token->id . " id=" . $id . ">Delete</button></td>";
+                echo "<td><button data-nonce=\"" . esc_attr($nonce) . "\" class='btn btn-danger' data-token-id=" . esc_attr($token->id) . " id=" . esc_attr($id) . ">Delete</button></td>";
                 echo "</tr>";
 
               }
