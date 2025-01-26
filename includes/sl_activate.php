@@ -8,11 +8,13 @@ function sl_activate_plugin()
     global $wpdb;
     //get table name
     $sl_tokens = $wpdb->prefix . 'sl_tokens';
+    $prepared_table_name = $wpdb->prefix . 'sl_tokens';
     $charset_collate = $wpdb->get_charset_collate();
+
     //check if tokens table exists
-    if ($wpdb->get_var("SHOW TABLES LIKE '$sl_tokens'") != $sl_tokens) {
+    if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $prepared_table_name)) != $prepared_table_name) {
       // SQL to create the tokens table
-      $sql = "CREATE TABLE $sl_tokens (
+      $sql = "CREATE TABLE $prepared_table_name (
         id INT NOT NULL AUTO_INCREMENT,
         page_ID INT NOT NULL,
         slug VARCHAR(255) NOT NULL,
