@@ -5,7 +5,7 @@ add_action( 'wp_ajax_sl_save_token', 'sl_save_token' );
 function sl_save_token() {
     global $wpdb;
 
-    if( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sl-copy-link_' . $_POST['page_id'] ) ) {
+    if( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash($_POST['nonce']), 'sl-copy-link_' . $_POST['page_id'] ) ) {
         wp_send_json_error( 'Invalid nonce' );
         return;
     }
@@ -16,7 +16,7 @@ function sl_save_token() {
     $current_time = isset( $_POST['current_time'] ) ? sanitize_text_field( $_POST['current_time'] ) : '';
 
     //Calculate expiration time (24 hours from current time)
-    $expiration_time = date( 'Y-m-d H:i:s', strtotime( $current_time . ' + 24 hours' ) );
+    $expiration_time = gmdate( 'Y-m-d H:i:s', strtotime( $current_time . ' + 24 hours' ) );
 
     $tokens_table = $wpdb->prefix . 'sl_tokens';
 
