@@ -1,3 +1,9 @@
+const Toastify = require('toastify-js');
+require('../node_modules/toastify-js/src/toastify.css');
+require('../node_modules/bootstrap/dist/css/bootstrap.min.css');
+require('../css/pl-style.css');
+
+
 if(window.attachEvent) {
     window.attachEvent('onload', sl_column_button_action);
 } else {
