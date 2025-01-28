@@ -2,7 +2,7 @@
 Contributors: mataro
 Requires at least: 6.2
 Tested up to: 6.7.1
-Stable tag: 0.4.45
+Stable tag: 0.5.0
 Requires PHP: 8.2
 License: MIT
 License URI: https://mit-license.org/license.txt

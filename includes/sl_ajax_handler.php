@@ -5,15 +5,19 @@ add_action( 'wp_ajax_sl_save_token', 'sl_save_token' );
 function sl_save_token() {
     global $wpdb;
 
-    if( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash($_POST['nonce']), 'sl-copy-link_' . $_POST['page_id'] ) ) {
+    $nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash($_POST['nonce']) ) : '';
+    $page_id = isset( $_POST['page_id'] ) ? sanitize_text_field( wp_unslash($_POST['page_id']) ) : '';
+
+    if( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash($nonce), 'sl-copy-link_' . $page_id ) ) {
         wp_send_json_error( 'Invalid nonce' );
         return;
     }
 
     $token = isset( $_POST['token'] ) ? sanitize_text_field( $_POST['token'] ) : '';
-    $page_id = isset( $_POST['page_id'] ) ? sanitize_text_field( $_POST['page_id'] ) : '';
+    
     $slug = isset( $_POST['slug'] ) ? sanitize_text_field( $_POST['slug'] ) : '';
     $current_time = isset( $_POST['current_time'] ) ? sanitize_text_field( $_POST['current_time'] ) : '';
+    
 
     //Calculate expiration time (24 hours from current time)
     $expiration_time = gmdate( 'Y-m-d H:i:s', strtotime( $current_time . ' + 24 hours' ) );
