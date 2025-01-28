@@ -25,11 +25,12 @@ function sl_save_token()
 
     $tokens_table = $wpdb->prefix . 'sl_tokens';
 
+    $escaped_table = esc_sql($tokens_table);
 
-    $inserted = $wpdb->query(
+    $inserted = $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery 
         $wpdb->prepare(
             "INSERT INTO %i (page_ID, token, slug, expiration) VALUES (%d, %s, %s, %s)",
-            $tokens_table,
+            $escaped_table,
             $page_id,
             $token,
             $slug,
@@ -61,13 +62,15 @@ function sl_delete_token()
     $id = isset($_POST['token_id']) ? sanitize_text_field(wp_unslash($_POST['token_id'])) : '';
 
     $tokens_table = $wpdb->prefix . 'sl_tokens';
+    $escaped_table = esc_sql($tokens_table);
 
-    $deleted = $wpdb->delete(
-        $tokens_table,
-        array(
-            'id' => $id,
+    $deleted = $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+        $wpdb->prepare(
+            "DELETE FROM %i WHERE ID = %d",
+            $escaped_table,
+            $id
         )
-    );
+    ); 
 
     if (! $deleted) {
         wp_send_json_error('Error deleting data: ' . $wpdb->last_error);
