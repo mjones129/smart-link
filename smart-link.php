@@ -68,10 +68,10 @@ function sl_plugin_uninstall()
     $tokens = $wpdb->prefix . 'sl_tokens';
     
     // Execute queries
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery
     $result = $wpdb->query($wpdb->prepare("DROP TABLE IF EXISTS %i", $tokens));
     
     if( is_wp_error($result) ) {
-        // error_log('Failed to drop table: ' . $tokens);
         wp_die(
             'Failed to drop table: ' . esc_html($tokens) . '. Error: ' . esc_html($result->get_error_message()),
             'Database Error',
