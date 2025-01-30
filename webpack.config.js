@@ -10,7 +10,8 @@ const archiver = require("archiver");
 module.exports = {
   entry: {
     main: "./js/copyPrivateLink.js",
-    vendor: "./node_modules/toastify-js/src/toastify.js",
+    toastify: "./node_modules/toastify-js/src/toastify.js",
+    sendNonce: "./js/sendNonce.js",
   },
   output: {
     filename: "js/[name].js",
@@ -48,6 +49,10 @@ module.exports = {
           to: "includes/sl_ajax_handler.php",
         },
         { from: "pages/slp_dashboard.php", to: "pages/slp_dashboard.php" },
+        {
+          from: "includes/sl_check_access_token.php",
+          to: "includes/sl_check_access_token.php",
+        },
         { from: "smart-link.php", to: "smart-link.php" },
         { from: "README.txt", to: "README.txt" },
       ],
