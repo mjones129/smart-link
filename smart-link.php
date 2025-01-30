@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.5.0
+ * Version: 0.5.1
  * Author: Smart Link Pro
  * Author URI: https://smartlinkpro.io
  * Text Domain: smart-link
@@ -70,10 +70,13 @@ function sl_plugin_uninstall()
     // Execute queries
     $result = $wpdb->query($wpdb->prepare("DROP TABLE IF EXISTS %i", $tokens));
     
-    if($result === false) {
-        error_log('Failed to drop table: ' . $tokens);
-    } else {
-        error_log('Successfully dropped table: ' . $tokens);
+    if( is_wp_error($result) ) {
+        // error_log('Failed to drop table: ' . $tokens);
+        wp_die(
+            'Failed to drop table: ' . esc_html($tokens) . '. Error: ' . esc_html($result->get_error_message()),
+            'Database Error',
+            array('back_link' => true)
+        );
     }
 
     // Delete access denied page
@@ -83,64 +86,7 @@ function sl_plugin_uninstall()
     }
 }
 
-
-// Check user token for page access
-function sl_check_access_token()
-{
-    global $wpdb;
-
-    // error_log("sl_check_access_token function called");
-
-    // Select all the page slugs from the tokens table
-    $protected_slugs = $wpdb->get_col("SELECT slug FROM " . $wpdb->prefix . "sl_tokens");
-    error_log("Protected slugs: " . print_r($protected_slugs, true));
-
-    // Only run on pages, not blog posts
-    if (is_page()) {
-        global $post;
-        error_log("Post object: " . print_r($post, true));
-
-        $current_slug = $post->post_name;
-        error_log("Current slug: " . $current_slug);
-
-        // If current page exists in protected_slugs, check for token
-        if (in_array($current_slug, $protected_slugs)) {
-            error_log("current_slug is in array protected_slugs.");
-            if (!isset($_GET['access_token'])) {
-                wp_redirect(home_url('/access-denied/'));
-                exit();
-            }
-            $token = $_GET['access_token'];
-            $current_time = current_time('mysql');
-            $token_entry = $wpdb->get_row(
-                $wpdb->prepare(
-                    "SELECT * FROM " . $wpdb->prefix . "sl_tokens WHERE token = %s AND expiration > %s AND used = 0",
-                    $token,
-                    $current_time
-                )
-            );
-
-            if (!$token_entry) {
-                wp_redirect(home_url('/access-denied/'));
-                exit();
-            } else {
-                // Mark token as used
-                $wpdb->update(
-                    $wpdb->prefix . 'sl_tokens',
-                    array('used' => 1),
-                    array('id' => $token_entry->id),
-                    array('%d'),
-                    array('%d')
-                );
-            }
-        } else {
-            error_log("current_slug is NOT in array protected_slugs.");
-        }
-    } else {
-        error_log("Not a page.");
-    }
-}
-add_action('template_redirect', 'sl_check_access_token');
+require_once(plugin_dir_path(__FILE__) . '/includes/sl_check_access_token.php');
 
 //add admin menu item
 function sl_admin_menu()
@@ -183,12 +129,22 @@ function sl_admin_styles()
 
     wp_enqueue_style('sl_style', plugin_dir_url(__FILE__) . 'css/main.css', array(), '1.0.1', 'all');
     wp_enqueue_script('copy-private-link', plugin_dir_url(__FILE__) . 'js/main.js', array('jquery'), '1.0.1', true);
-    wp_enqueue_script('vendor-js', plugin_dir_url(__FILE__) . 'js/vendor.js', array(), '1.0.1', true);
+    wp_enqueue_script('toastify-js', plugin_dir_url(__FILE__) . 'js/toastify.js', array(), '1.0.1', true);
 
     wp_localize_script('copy-private-link', 'sl_ajax_object', array(
       'ajax_url' => admin_url('admin-ajax.php'),
+      'nonce' => wp_create_nonce('sl_nonce')
     ));
 
 }
 add_action('admin_enqueue_scripts', 'sl_admin_styles');
 
+function sl_send_nonce()
+{
+    wp_enqueue_script('sl_nonce', plugin_dir_url(__FILE__) . 'js/sendNonce.js', array('jquery'), '1.0.0', true);
+    wp_localize_script('sl_nonce', 'sl_ajax_object', array(
+      'ajax_url' => admin_url('admin-ajax.php'),
+      'nonce' => wp_create_nonce('sl_check_token')
+    ));
+}
+add_action('wp_enqueue_scripts', 'sl_send_nonce');
