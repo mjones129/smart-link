@@ -80,6 +80,7 @@ function slp_admin_page()
             <?php
             global $wpdb;
             //make a request to the database and get all rows from the sl_tokens table
+            // phpcs:ignore.WordPress.DB.DirectDatabaseQuery
             $tokens = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sl_tokens");
 
             //only loop through if there are tokens
