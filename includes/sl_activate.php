@@ -2,19 +2,22 @@
 
 function sl_activate_plugin()
 {
-    //create database table
-    require_once(ABSPATH . '/wp-admin/includes/upgrade.php');
+  //create database table
+  
 
-    global $wpdb;
-    //get table name
-    $sl_tokens = $wpdb->prefix . 'sl_tokens';
-    $prepared_table_name = $wpdb->prefix . 'sl_tokens';
-    $charset_collate = $wpdb->get_charset_collate();
+  global $wpdb;
+  //get table name
+  $sl_tokens = $wpdb->prefix . 'sl_tokens';
+  $prepared_table_name = $wpdb->prefix . 'sl_tokens';
+  $charset_collate = $wpdb->get_charset_collate();
 
-    //check if tokens table exists
-    if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $prepared_table_name)) != $prepared_table_name) {
-      // SQL to create the tokens table
-      $sql = "CREATE TABLE $prepared_table_name (
+  //check if tokens table exists
+  if ($wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+    $wpdb->prepare(
+      "SHOW TABLES LIKE %s", $prepared_table_name)
+  ) != $prepared_table_name) {
+    // // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+    $sql = "CREATE TABLE $prepared_table_name ( 
         id INT NOT NULL AUTO_INCREMENT,
         page_ID INT NOT NULL,
         slug VARCHAR(255) NOT NULL,
@@ -25,19 +28,17 @@ function sl_activate_plugin()
         UNIQUE (token)
       ) $charset_collate;";
 
-      dbDelta($sql);
-    }
+    require_once(ABSPATH . '/wp-admin/includes/upgrade.php');
+    dbDelta($sql);  
+  }
 
-    //create access denied page
-    $access_denied_page = array(
-        'post_title' => 'Access Denied',
-        'post_content' => 'This is a protected page. You do not have access to view this content.',
-        'post_status' => 'publish',
-        'post_type' => 'page',
-        'post_name' => 'access-denied'
-    );
-    wp_insert_post($access_denied_page);
-
+  //create access denied page
+  $access_denied_page = array(
+    'post_title' => 'Access Denied',
+    'post_content' => 'This is a protected page. You do not have access to view this content.',
+    'post_status' => 'publish',
+    'post_type' => 'page',
+    'post_name' => 'access-denied'
+  );
+  wp_insert_post($access_denied_page);
 }
-
-
