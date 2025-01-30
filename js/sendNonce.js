@@ -4,7 +4,9 @@ jQuery(document).ready(function($) {
 
     // Example function to send nonce via custom HTTP header
     function sendNonceViaHeader() {
-        const token = window.location.search.split('access_token=')[1];
+        const tokenCheck = window.location.search.split('access_token=')[1];
+        const token = tokenCheck === undefined ? '' : tokenCheck;
+        console.log(`nonce: ${sl_ajax_object.nonce}`); 
         $.ajax({
             url: sl_ajax_object.ajax_url,
             type: 'POST',
@@ -19,7 +21,12 @@ jQuery(document).ready(function($) {
                 current_time: new Date().toISOString()
             },
             success: function(response) {
-                console.log(response);
+                output = JSON.stringify(response);
+                console.log(`success: ${output}`);
+            },
+            error: function(response) {
+                output = JSON.stringify(response)
+                console.log(`Error: ${output}`);
             }
         });
     }

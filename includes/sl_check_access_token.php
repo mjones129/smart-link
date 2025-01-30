@@ -3,11 +3,13 @@
 function sl_check_token()
 {
 
-    $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+    $nonce = isset($_SERVER['HTTP_X_WP_NONCE']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_X_WP_NONCE'])) : '';
 
-    if (! isset($_POST['nonce']) || ! wp_verify_nonce($nonce, 'sl-check-token')) {
-        wp_send_json_error('Invalid nonce');
+    if (!wp_verify_nonce($nonce, 'sl_check_token')) {
+        wp_send_json_error('Invalid nonce from sl_check_token');
         return;
+    } else {
+        wp_send_json_success('Nonce accepted from sl_check_token');
     }
 
     global $wpdb;
@@ -16,15 +18,16 @@ function sl_check_token()
     $tokens_table = $wpdb->prefix . 'sl_tokens';
 
     $cache_key = 'sl_protected_slugs_cache';
-    $protected_slugs = wp_cache_get($cache_key);
+    $tokens_in_database = array();
 
-    if ($protected_slugs === false) {
+
+    if (!isset($tokens_in_database)) {
         $escaped_table = esc_sql($tokens_table);
-        $protected_slugs = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-            $wpdb->prepare("SELECT slug FROM %i", $escaped_table)
+        $tokens_in_database = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->prepare("SELECT token FROM %i", $escaped_table)
         );
 
-        wp_cache_set($cache_key, $protected_slugs);
+        // wp_cache_set($cache_key, $tokens_in_database, '', 12 * HOUR_IN_SECONDS);
     }
 
 
@@ -35,22 +38,20 @@ function sl_check_token()
         $current_slug = $post->post_name;
 
         // If current page exists in protected_slugs, check for token
-        if (in_array($current_slug, $protected_slugs)) {
+        if (in_array($current_slug, $tokens_in_database)) {
             $sanitized_token = isset($_GET['access_token']) ? sanitize_text_field(wp_unslash($_GET['access_token'])) : '';
             if (!isset($sanitized_token)) {
                 wp_redirect(home_url('/access-denied/'));
                 exit();
             }
 
-            $token = sanitize_text_field(wp_unslash($_GET['access_token']));
-            // $sanitized_token = esc_html(wp_unslash($token));
             $current_time = current_time('mysql');
 
             $token_entry = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->prepare(
                     "SELECT * FROM %i WHERE token = %s AND expiration > %s AND used = 0",
                     $escaped_table,
-                    $token,
+                    $sanitized_token,
                     $current_time
                 )
             );

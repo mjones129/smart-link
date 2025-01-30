@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Smart Link
  * Description: Generate one-time-use links that expire after 24 hours.
- * Version: 0.5.1
+ * Version: 0.5.2
  * Author: Smart Link Pro
  * Author URI: https://smartlinkpro.io
  * Text Domain: smart-link
@@ -141,7 +141,7 @@ add_action('admin_enqueue_scripts', 'sl_admin_styles');
 
 function sl_send_nonce()
 {
-    wp_enqueue_script('sl_nonce', plugin_dir_url(__FILE__) . 'js/sendNonce.js', array('jquery'), '1.0.0', true);
+    wp_enqueue_script('sl_nonce', plugin_dir_url(__FILE__) . 'js/sendNonce.js', array('jquery'), '1.0.1', true);
     wp_localize_script('sl_nonce', 'sl_ajax_object', array(
       'ajax_url' => admin_url('admin-ajax.php'),
       'nonce' => wp_create_nonce('sl_check_token')
