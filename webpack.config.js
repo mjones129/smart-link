@@ -50,8 +50,8 @@ module.exports = {
         },
         { from: "pages/slp_dashboard.php", to: "pages/slp_dashboard.php" },
         {
-          from: "includes/sl_check_access_token.php",
-          to: "includes/sl_check_access_token.php",
+          from: "includes/sl_check_access_rewrite.php",
+          to: "includes/sl_check_access_rewrite.php",
         },
         { from: "smart-link.php", to: "smart-link.php" },
         { from: "README.txt", to: "README.txt" },

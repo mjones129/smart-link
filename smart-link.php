@@ -86,7 +86,8 @@ function sl_plugin_uninstall()
     }
 }
 
-require_once(plugin_dir_path(__FILE__) . '/includes/sl_check_access_token.php');
+// require_once(plugin_dir_path(__FILE__) . '/includes/sl_check_access_token.php');
+require_once(plugin_dir_path(__FILE__) . '/includes/sl_check_access_rewrite.php');
 
 //add admin menu item
 function sl_admin_menu()
