@@ -10,17 +10,6 @@ function sl_check_token()
         return;
     }
 
-    echo "<p>";
-        echo "This is after the nonce check, before the page check.";
-        echo "</p>";
-
-    // Only run on pages, not blog posts
-    if (is_page()) {
-
-        // echo "<p>";
-        // echo "This is inside the page check.";
-        // echo "</p>";
-
         global $wpdb;
         global $post;
 
@@ -35,7 +24,6 @@ function sl_check_token()
         $current_slug = $post->post_name;
 
         
-
         // If a link exists in the database that matches the current page, check for a token
         if (in_array($current_slug, $links_in_database)) {
 
@@ -79,6 +67,5 @@ function sl_check_token()
                 );
             }
         }
-    }
 }
 add_action('wp_ajax_nopriv_sl_check_token', 'sl_check_token');
