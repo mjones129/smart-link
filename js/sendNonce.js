@@ -22,6 +22,7 @@ jQuery(document).ready(function($) {
             },
             success: function(response) {
                 output = JSON.stringify(response);
+                $(".page").append(output);
                 console.log(`success: ${output}`);
             },
             error: function(response) {
