@@ -58,7 +58,6 @@ function sl_is_slug_protected() {
             break;
         }
     }
-
 }
 
 $i = 0;
@@ -67,6 +66,10 @@ $index_match = null;
 function sl_is_token_valid() {
     global $sl_links, $index_match, $sl_token_validation, $match_found;
     $user_token = isset($_POST['access_token']) ? sanitize_text_field(wp_unslash($_GET['access_token'])) : '';
+    if ($user_token == '') {
+        wp_send_json_error('No access token provided.');
+        exit;
+    }
     if($match_found) {
         for ($i = 0; $i <= count($sl_links); $i++) {
             if($user_token === $sl_links[$i]['token']) {
@@ -93,10 +96,19 @@ function sl_expiration_still_valid() {
 
 function sl_token_checker() {
     global $sl_token_validation, $sl_links, $match_found;
+    //check the slug
+    sl_is_slug_protected();
+    //check for a token
+    sl_is_token_valid();
+    //check expiration time
     $index_match = sl_expiration_still_valid();
-    if($match_found) {
-        if($sl_links[$index_match]['slug'] === $sl_token_validation['slug'] && $sl_links[$index_match]['token'] === $sl_token_validation['token'] && $sl_token_validation['expiration'] === 0) {
-            wp_send_json_success('Token accepted.');
+    if ($index_match) {
+        if($match_found) {
+            if($sl_links[$index_match]['slug'] === $sl_token_validation['slug'] && $sl_links[$index_match]['token'] === $sl_token_validation['token'] && $sl_token_validation['expiration'] === 0) {
+                wp_send_json_success('Token accepted.');
+            }
         }
+    } else {
+        wp_send_json_error('No index was matched.');
     }
 }
