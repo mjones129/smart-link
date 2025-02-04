@@ -23,7 +23,7 @@ function sl_activate_plugin()
         slug VARCHAR(255) NOT NULL,
         token VARCHAR(32) NOT NULL,
         expiration DATETIME NOT NULL,
-        used TINYINT DEFAULT 0,
+        used BOOLEAN DEFAULT FALSE,
         PRIMARY KEY (id),
         UNIQUE (token)
       ) $charset_collate;";
