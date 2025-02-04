@@ -10,8 +10,8 @@ function sl_check_token()
         return;
     }
 
-    // sl_token_checker();
-    wp_send_json_success('please be something different than a zero');
+    sl_token_checker();
+
 
 }
 add_action('wp_ajax_nopriv_sl_check_token', 'sl_check_token');
@@ -92,7 +92,8 @@ function sl_expiration_still_valid() {
 }
 
 function sl_token_checker() {
-    global $sl_token_validation, $sl_links, $index_match, $match_found;
+    global $sl_token_validation, $sl_links, $match_found;
+    $index_match = sl_expiration_still_valid();
     if($match_found) {
         if($sl_links[$index_match]['slug'] === $sl_token_validation['slug'] && $sl_links[$index_match]['token'] === $sl_token_validation['token'] && $sl_token_validation['expiration'] === 0) {
             wp_send_json_success('Token accepted.');

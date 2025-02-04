@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
                 current_time: new Date().toISOString()
             },
             success: function(response) {
-                if(response) {
+                if(response.success) {
                     output = JSON.stringify(response)
                     console.log(`ajax response success: ${output}`);
                 } else {
