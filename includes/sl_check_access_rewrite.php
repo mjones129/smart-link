@@ -41,15 +41,20 @@ function sl_get_links() {
     }
 }
 
-$sl_links = sl_get_links();
+$link_check = sl_get_links();
+if (empty($link_check)) {
+    wp_send_json_success('No smart links in database');
+} else {
+    $sl_links = sl_get_links();
+}
 
 $sl_token_validation = array();
 
 $match_found = false;
 
 function sl_is_slug_protected() {
-    $current_slug = isset($_POST['slug']) ? sanitize_text_field(wp_unslash($_POST['slug'])) : '';
     global $sl_links, $sl_token_validation, $match_found;
+    $current_slug = isset($_POST['slug']) ? sanitize_text_field(wp_unslash($_POST['slug'])) : '';
     $total_links = count($sl_links);
     for ($i = 0; $i < $total_links; $i++) {
         if($current_slug === $sl_links[$i]['slug']) {
@@ -58,28 +63,28 @@ function sl_is_slug_protected() {
             break;
         }
     }
+    wp_send_json_success('Unprotected slug');
 }
 
-$i = 0;
+
+$global_index = 0;
 $index_match = null;
 
 function sl_is_token_valid() {
     global $sl_links, $index_match, $sl_token_validation, $match_found;
-    $user_token = isset($_POST['access_token']) ? sanitize_text_field(wp_unslash($_GET['access_token'])) : '';
-    if ($user_token == '') {
+    $user_token = isset($_POST['access_token']) ? sanitize_text_field(wp_unslash($_POST['access_token'])) : '';
+    if ($match_found && $user_token == '') {
         wp_send_json_error('No access token provided.');
-        exit;
     }
     if($match_found) {
-        for ($i = 0; $i <= count($sl_links); $i++) {
-            if($user_token === $sl_links[$i]['token']) {
-                $index_match = $i;
-                $sl_token_validation['token'][$sl_links[$i]['token']];
+        for ($global_index = 0; $global_index <= count($sl_links); $global_index++) {
+            if($user_token === $sl_links[$global_index]['token']) {
+                $index_match = $global_index;
+                $sl_token_validation['token'][$sl_links[$global_index]['token']];
                 break;
             }
         }
     }
-    wp_send_json_error('Invalid access token.');
 }
 
 function sl_expiration_still_valid() {
@@ -91,7 +96,6 @@ function sl_expiration_still_valid() {
             return $index_match;
         }        
     }
-    wp_send_json_error('Access token expired.');
 }
 
 function sl_token_checker() {
