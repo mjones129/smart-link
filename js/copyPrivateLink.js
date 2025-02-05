@@ -146,6 +146,7 @@ function sl_column_button_action(){
                 success: (response) => {
                     let storedToken = generateToken();
                     let slug = response.slug;
+                    console.log(`Yon slug: ${slug}`);
                     let privateLink = `${window.location.origin}/${response.slug}?access_token=${storedToken}`;
                     copyPrivateLink(privateLink);
                     // this ajax call will save the token to the database for later use
@@ -162,7 +163,7 @@ function sl_column_button_action(){
                         },
                         success: (response) => {
                             Toastify({
-                                text: `ajax response: ${response.data}`,
+                                text: `${response.data}`,
                                 duration: 5000,
                                 newWindow: true,
                                 close: true,
