@@ -5,6 +5,9 @@ jQuery(document).ready(function ($) {
   const slug = window.location.pathname;
   const cleanSlug = slug.replace(/^\/|\/$/g, "");
   console.log(`nonce: ${sl_ajax_object.nonce}`);
+  console.log(`token: ${token}`);
+  console.log(`slug: ${slug}`);
+  console.log(`cleanSlug: ${cleanSlug}`);
   $.ajax({
     url: sl_ajax_object.ajax_url,
     type: "POST",

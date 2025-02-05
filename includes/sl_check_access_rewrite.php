@@ -10,7 +10,7 @@ function sl_check_token()
         return;
     }
 
-    // sl_token_checker();
+    sl_token_checker();
 
 }
 add_action('wp_ajax_nopriv_sl_check_token', 'sl_check_token');
