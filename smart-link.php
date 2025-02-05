@@ -50,7 +50,6 @@ register_activation_hook(__FILE__, 'sl_plugin_activate');
 
 function sl_plugin_activate()
 {
-    // require_once plugin_dir_path(__FILE__) . 'activate.php';
     require_once plugin_dir_path(__FILE__) . 'includes/sl_activate.php';
     sl_activate_plugin();
     flush_rewrite_rules();
@@ -86,8 +85,12 @@ function sl_plugin_uninstall()
     }
 }
 
-// require_once(plugin_dir_path(__FILE__) . '/includes/sl_check_access_token.php');
-require_once(plugin_dir_path(__FILE__) . '/includes/sl_check_access_rewrite.php');
+function sl_enable_token_check() {
+    if (!is_admin()) {
+        require_once(plugin_dir_path(__FILE__) . '/includes/sl_check_access_rewrite.php');
+    }
+}
+add_action('init', 'sl_enable_token_check');
 
 //add admin menu item
 function sl_admin_menu()
