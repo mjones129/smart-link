@@ -3,8 +3,6 @@
 function sl_activate_plugin()
 {
   //create database table
-  
-
   global $wpdb;
   //get table name
   $sl_tokens = $wpdb->prefix . 'sl_tokens';
