@@ -151,4 +151,4 @@ function sl_send_nonce()
       'nonce' => wp_create_nonce('sl_check_token')
     ));
 }
-add_action('wp_enqueue_scripts', 'sl_send_nonce');
+// add_action('wp_enqueue_scripts', 'sl_send_nonce');
