@@ -115,7 +115,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Matt Jones - [@mattjonestech](https://twitter.com/mattjonestech)
+Matt Jones - [mattjones.tech](https://www.mattjones.tech)
 
 Project Link: [https://github.com/mjones129/smart-link](https://github.com/mjones129/smart-link)
 
